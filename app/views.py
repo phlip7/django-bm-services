@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm
+from .forms import CreateUserForm, GigForm
 from .models import *
 
 
@@ -37,9 +37,6 @@ def signin(request):
 			email = request.POST.get('email')
 			password = request.POST.get('password')
 			username = User.objects.get(email=email.lower()).username
-			print(username)
-			print(email)
-			print(password)
 			user = authenticate(request, username=username, password=password)
 
 			if user is not None:
@@ -54,3 +51,19 @@ def signin(request):
 def disconnect(request):
 	logout(request)
 	return redirect('signin')
+
+@login_required(login_url="signin")
+def create_gig(request):
+    error = ''
+    if request.method == 'POST':
+        gig_form = GigForm(request.POST, request.FILES)
+        if gig_form.is_valid():
+            gig = gig_form.save(commit=False)
+            gig.user = request.user
+            gig.save()
+            return redirect('my_gigs')
+        else:
+            error = "Données non valides"
+
+    gig_form = GigForm()
+    return render(request, 'create-gig.html', {"error": error})

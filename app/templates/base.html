@@ -61,15 +61,19 @@
               <!-- /Megamenu end-->
               <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
 
-
             {% if user and not user.is_anonymous %}
-              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle active" id="SignInDropdownMenuLink" href="index.html" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   Profile</a>
-                <div class="dropdown-menu" aria-labelledby="homeDropdownMenuLink">
-                  <a class="dropdown-item" href="{% url 'home' %}">Profile</a>
-                  <a class="dropdown-item" href="{% url 'disconnect' %}">Se Deconnecter</a>
+
+              <li class="nav-item dropdown ml-lg-3">
+                <a id="userDropdownMenuLink" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="avatar avatar-sm avatar-border-white mr-2" src="{% static 'img/avatar/avatar-7.jpg' %}" alt="Jack London"></a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdownMenuLink">
+                  <a class="dropdown-item" href="user-booking-1.html">Booking process - 4 pages </a>
+                  <a class="dropdown-item" href="user-grid.html">Bookings &mdash; grid view </a>
+                  <a class="dropdown-item" href="user-booking-detail.html">Booking detail </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'disconnect' %}"><i class="fas fa-sign-out-alt mr-2 text-muted"></i> Se Deconnecter</a>
                 </div>
-              </li>              
+              </li>
+           
             {% else %}
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle active" id="SignInDropdownMenuLink" href="index.html" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    Connection</a>
@@ -82,7 +86,7 @@
 
               <!--<li class="nav-item"><a class="nav-link" href="login.html">Sign in</a></li> -->
               <!--<li class="nav-item"><a class="nav-link" href="signup.html">Sign up</a></li> -->
-              <li class="nav-item mt-3 mt-lg-0 ml-lg-3 d-lg-none d-xl-inline-block"><a class="btn btn-primary" href="user-add-0.html">Ajoutes ton Service</a></li>
+              <li class="nav-item mt-3 mt-lg-0 ml-lg-3 d-lg-none d-xl-inline-block"><a class="btn btn-primary" href="{% url 'create_gig' %}">Ajoutes ton Service</a></li>
             </ul>
           </div>
         </div>
