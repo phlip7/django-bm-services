@@ -1,26 +1,52 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Gig
+from .models import Gig, City
 from django import forms
 
 class CreateUserForm(UserCreationForm):
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'password1', 'password2']
+		fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 class GigForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':5}))
     class Meta:
         model = Gig
-        fields = ['title', 'category', 'description', 'price', 'photo', 'status']
+        #fields = '__all__'
+        fields = ['title', 'category', 'description', 'price', 'photo', 'status', 'country', 'city', 'area', 'address']
 
-        # def __init__(self, *args, **kwargs):
-        #     super(GigForm, self).__init__(*args, **kwargs)
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['city'].queryset = City.objects.none()
+            self.fields['area'].queryset = Area.objects.none()
+
+            if 'country' in self.data:
+            	try:
+                	country_id = int(self.data.get('country'))
+                	self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
+            	except (ValueError, TypeError):
+                	pass  # invalid input from the client; ignore and fallback to empty City queryset
+            elif self.instance.pk:
+            	self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
+
+            if 'city' in self.data:
+            	try:
+                	city_id = int(self.data.get('city'))
+                	self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
+            	except (ValueError, TypeError):
+                	pass  # invalid input from the client; ignore and fallback to empty City queryset
+            elif self.instance.pk:
+            	self.fields['area'].queryset = self.instance.city.area_set.order_by('name')
+
+
+			#super(GigForm, self).__init__(*args, **kwargs)
             
-        #     for field in  self.fields:
-        #         self.fields[field].widget.attrs['class'] = 'form-control'
-        #         self.fields[field].widget.attrs['name'] = field
-        #         self.fields[field].widget.attrs['id'] = field
+            # for field in  self.fields:
+            #     self.fields[field].widget.attrs['class'] = 'form-control'
+            #     self.fields[field].widget.attrs['name'] = field
+            #     self.fields[field].widget.attrs['id'] = field
+				
             # self.fields['title'].widget.attrs['id'] = 'title'
             # self.fields['title'].widget.attrs['name'] = 'title'
             # self.fields['title'].widget.attrs['id'] = 'title'

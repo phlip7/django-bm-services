@@ -19,8 +19,16 @@
     <div class="container">
       <p class="subtitle text-primary">Creation d'un nouveau service</p>
       <h1 class="h2 mb-5"> Basic information <span class="text-muted float-right">Step 1</span>      </h1>
+ 
+    {% comment %} 
+     <h2>Person Form</h2>
+        <form method="post" id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form> {% endcomment %}
 
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data"  id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
         {% csrf_token %}
 
         <div class="row form-block">
@@ -32,29 +40,25 @@
             <div class="form-group"></div>
             <div class="form-group">
               <label class="form-label" for="form_name">Titre - Nom ou Titre du service</label>
-              <input class="form-control" name="title" id="title">
+              {{ form.title }}
             </div>
             <div class="form-group">
               <label class="form-label" for="form_type">Categories</label>
-              <select class="selectpicker form-control" name="category" id="category" data-style="btn-selectpicker" title="" aria-describedby="propertyTypeHelp">
-                <option value="type_0">Entire place                         </option>
-                <option value="type_1">Private room                         </option>
-                <option value="type_2">Shared room                         </option>
-              </select>
+              {{ form.category }}
               <small class="form-text text-muted" id="propertyTypeHelp">Choisis la catégorie qui se rapproche le plus de ton service. </small>
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Description</label>
-              <textarea class="form-control" name="description" id="description" rows="5" aria-describedby="descriptionHelp"></textarea>
+              {{ form.description }}
               <small class="form-text text-muted mt-2" id="descriptionHelp">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he thought. It wasn't a dream.    </small>
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Prix - CFA -</label>
-              <input class="form-control" name="price" id="price" type="number" value="0">
+              {{ form.price }}
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Photo</label>
-              <input class="form-control" name="photo" id="photo" type="file">
+              {{ form.photo }}
               <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
             </div>
           </div>
@@ -67,47 +71,103 @@
           <div class="col-lg-7 ml-auto">
             <!-- Country-->
             <div class="form-group">
-              <label class="form-label" for="form_country">Country / Region</label>
-              <select class="selectpicker form-control" name="country" id="form_country" data-style="btn-selectpicker" title=" " data-live-search="true">
-                <option value="country_#{index}">Cote D Ivoire             </option>
-              </select>
+              <label class="form-label" for="form_country">Pays</label>
+              {{ form.country }}
             </div>
-            <!-- Street-->
-            <div class="form-group">
-              <label class="form-label" for="form_street">Street Address</label>
-              <input class="form-control" name="name" id="form_street">
-            </div>
-            <!-- City + State-->
+            <!-- City + Area-->
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label" for="form_city">City</label>
-                  <input class="form-control" name="name" id="form_city">
+                  <label class="form-label" for="form_city">Ville</label>
+                  {{ form.city }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label" for="form_state">State</label>
-                  <input class="form-control" name="name" id="form_state">
+                  <label class="form-label" for="form_state">Quartier</label>
+                  {{ form.area }}
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label" for="form_state">Status</label>
-                  <select name="status" class="form-control">
-                    <option value="1">Activé</option>
-                    <option value="0">Désactivé</option>
-                  </select>
-                </div>
-              </div>
+            </div>
+            <!-- Street-->
+            <div class="form-group">
+              <label class="form-label" for="form_street">Adresse (optionnel)</label>
+              {{ form.address }} 
             </div>
           </div>
         </div>
         <div class="row form-block">
-          <div class="container text-center"><button type="submit" class="btn btn-primary">Publier</button></div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="form_state">Statut de l'annonce</label>
+                {{ form.status }}
+              </div>
+            </div>        
+            <div class="container text-center"><button type="submit" class="btn btn-primary">Publier</button></div>
         </div>
       </form>
     </div>
   </section>
 
+<!-- Below Ajax scripts to set dependent form dropdown values  -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_country").change(function () {
+        const url = $("#gigForm").attr("data-cities-url");  // get the url of the `load_cities` view
+        const countryId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'country_id': countryId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+                /*
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (city) {
+                    html_data += `<option value="${city.id}">${city.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_city").html(html_data);
+                */
+            }
+        });
+    });
+
+    $("#id_city").change(function () {
+        const url = $("#gigForm").attr("data-areas-url");  // get the url of the `load_cities` view
+        const cityId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'city_id': cityId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+            }
+        });
+    });
+
+    /* Set <input> class name
+		 */
+		//Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+
+    var form_textarea = document.getElementsByTagName('textarea')
+    for (var ta_field in form_textarea){	
+			form_textarea[ta_field].className += ' form-control'
+		}
+
+    var form_select = document.getElementsByTagName('select')
+    for (var sel_field in form_select){	
+			form_select[sel_field].className += ' form-control'
+		}
+</script>
+
 {% endblock %}
+
