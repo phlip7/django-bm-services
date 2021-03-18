@@ -19,10 +19,29 @@ def signup(request):
         form = CreateUserForm()
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
+            #print(form)
             if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Compte créé pour '+ user)
+                user = User()
+                user.username = form.cleaned_data.get('username')
+                user.first_name = form.cleaned_data.get('first_name')
+                user.last_name = form.cleaned_data.get('last_name')
+                user.email = form.cleaned_data.get('email')
+                user.set_password( form.cleaned_data.get('password1'))
+                user.save()
+
+                usernam = form.cleaned_data.get('username')
+                country = form.cleaned_data.get('country')
+                city = form.cleaned_data.get('city')
+                
+                profile = Profile()
+                profile.user = User.objects.get(username=usernam)
+                profile.birthyear = form.cleaned_data.get('birthyear')
+                profile.phone = form.cleaned_data.get('phone')
+                profile.country = Country.objects.get(name=country)
+                profile.city = City.objects.get(name=city)
+                profile.save()
+                #form.save()                
+                messages.success(request, 'Compte créé pour '+ usernam)
                 return redirect('signin')
     
         context = {'form': form}
@@ -123,7 +142,7 @@ def profile(request, username):
         profile = Profile.objects.get(user=request.user)
         profile.about = request.POST['about']
         profile.slogan = request.POST['slogan']
-        profile.save()
+        #profile.save()
     else:
         try:
             profile = Profile.objects.get(user__username=username)
@@ -151,21 +170,40 @@ def account(request, username):
 
 @login_required(login_url="/")
 def personal_info(request, username):
-    #user = User.objects.get(username=username)
-    profile = Profile.objects.get(user__username=username)
-    # if request.method == 'POST':
-    #     profile = Profile.objects.get(user=request.user)
-    #     profile.about = request.POST['about']
-    #     profile.slogan = request.POST['slogan']
-    #     profile.save()
-    # else:
-    #     try:
-    #         profile = Profile.objects.get(user__username=username)
-    #     except Profile.DoesNotExist:
-    #         return redirect('/')
+    countries =  Country.objects.all()
+    cities =  City.objects.all()
+    
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        user = User.objects.get(username=username)
+        form_id = request.POST.get('form_id')
 
-    # gigs = Gig.objects.filter(user=profile.user, status=True)
-    return render(request, 'personal-info.html', {"profile": profile})
+        if form_id == 'perso':
+            user.username = request.POST['username']
+            user.first_name = request.POST['first_name']
+            user.last_name = request.POST['last_name']
+            user.email = request.POST['email']
+            user.save()
+            profile = Profile.objects.get(user=user.id)
+            profile.birthyear = request.POST['birthyear']
+            profile.phone = request.POST['phone']
+            profile.save()
+        elif form_id == 'addr':
+            profile.address = request.POST['address']
+            profile.country = Country.objects.get(name = request.POST['country'])
+            profile.city = City.objects.get(name = request.POST['city'])
+            profile.save()    
+        elif form_id == 'profl':
+            profile.about = request.POST['about']
+            profile.slogan = request.POST['slogan']
+            profile.save()
+    else:
+        try:
+            profile = Profile.objects.get(user__username=username)
+        except Profile.DoesNotExist:
+            return redirect('/')
+
+    return render(request, 'personal-info.html', {"profile": profile, "countries": countries, "cities": cities})
 
 # AJAX
 def load_cities(request):

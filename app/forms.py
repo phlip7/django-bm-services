@@ -1,13 +1,23 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Gig, City
+from .models import Gig, City, Country
 from django import forms
+import django.forms.utils
+import django.forms.widgets
 
 class CreateUserForm(UserCreationForm):
-	class Meta:
-		model = User
-		fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'mogo-002', 'autocomplete':'off', 'required':'required'}))
+    birthyear = forms.IntegerField(widget=forms.NumberInput(attrs={'minlength':4, 'maxlength':4, 'required':'required'}))
+    phone = forms.CharField(widget=forms.TextInput())
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), initial=0, required=True)
+    city = forms.ModelChoiceField(queryset=City.objects.all(), initial=0, required=True)
+    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'name@address.com', 'autocomplete':'off', 'required':'required'}))
+    
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
 
 class GigForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':5}))

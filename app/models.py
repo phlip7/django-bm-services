@@ -3,18 +3,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 # Create your models here.
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.CharField(max_length=500, null=True)
-    about = models.CharField(max_length=1000, null=True)
-    slogan = models.CharField(max_length=500, null=True)
-    birthdate = models.DateField(null=True) 
-    phone = models.CharField(max_length=20, null=True)
-    adress = models.CharField(max_length=100, null=True)
-
-    def __str__(self):
-        return self.user.username
-
 class Country(models.Model):
     name = models.CharField(max_length=30)
 
@@ -34,6 +22,20 @@ class Area(models.Model):
 
     def __str__(self):
         return self.name
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.CharField(max_length=500, null=True)
+    about = models.CharField(max_length=1000, null=True)
+    slogan = models.CharField(max_length=500, null=True)
+    birthyear = models.IntegerField(null=True) 
+    phone = models.CharField(max_length=20, null=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    address = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 class GigCategory(models.Model):
     name = models.CharField(max_length=70)
