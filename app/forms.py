@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Gig, City, Country
+from .models import Gig, City, Country, Area
 from django import forms
 import django.forms.utils
 import django.forms.widgets
@@ -20,7 +20,7 @@ class CreateUserForm(UserCreationForm):
 
 
 class GigForm(forms.ModelForm):
-    description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':5}))
+    description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':8}))
     class Meta:
         model = Gig
         #fields = '__all__'

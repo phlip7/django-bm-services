@@ -10,7 +10,8 @@ from .models import *
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    gigs = Gig.objects.filter(status=True)
+    return render(request, 'home.html', {"gigs": gigs})
 
 def signup(request):
     if request.user.is_authenticated:
@@ -81,10 +82,10 @@ def gig_detail(request, id):
     #     request.POST['content'].strip() != '':
     #     Review.objects.create(content=request.POST['content'], gig_id=id, user=request.user)
 
-    # try:
-    #     gig = Gig.objects.get(id=id)
-    # except Gig.DoesNotExist:
-    #     return redirect('/')
+    try:
+        gig = Gig.objects.get(id=id)
+    except Gig.DoesNotExist:
+        return redirect('/')
 
     # if request.user.is_anonymous() or \
     #     Purchase.objects.filter(gig=gig, buyer=request.user).count() == 0 or \
@@ -96,10 +97,10 @@ def gig_detail(request, id):
     #reviews = Review.objects.filter(gig=gig)
     #client_token = braintree.ClientToken.generate()
     #return render(request, 'gig_detail.html', {"show_post_review": show_post_review ,"reviews": reviews, "gig": gig, "client_token": client_token})
-    return render(request,  'gig-detail.html')
+    return render(request,  'gig-detail.html', {"gig": gig})
 
 @login_required(login_url="signin")
-def create_gig(request):
+def gig_create(request):
     error = ''
     if request.method == 'POST':
         gig_form = GigForm(request.POST, request.FILES)
@@ -112,22 +113,28 @@ def create_gig(request):
             error = "Données non valides"
 
     gig_form = GigForm()
-    return render(request, 'create-gig.html', {'error': error, 'form':gig_form})
+    return render(request, 'gig-create.html', {'error': error, 'form':gig_form})
 
 @login_required(login_url="/")
-def edit_gig(request, id):
+def gig_edit(request, id):
     try:
         gig = Gig.objects.get(id=id, user=request.user)
+        countries =  Country.objects.all()
+        cities =  City.objects.all()
+        areas =  Area.objects.all()
+        categories =  GigCategory.objects.all()
         error = ''
         if request.method == 'POST':
             gig_form = GigForm(request.POST, request.FILES, instance=gig)
+            print(gig_form)
             if gig_form.is_valid():
                 gig.save()
                 return redirect('my_gigs')
             else:
+                print(messages.error)
                 error = "Data is not valid"
-
-        return render(request, 'edit-gig.html', {"gig": gig, "error": error})
+        gig_form = GigForm()
+        return render(request, 'gig-edit.html', {"gig": gig, "error": error, 'countries': countries, 'cities': cities, 'areas': areas, 'categories': categories})
     except Gig.DoesNotExist:
         return redirect('/')
 
@@ -146,6 +153,7 @@ def profile(request, username):
     else:
         try:
             profile = Profile.objects.get(user__username=username)
+            print(profile)
         except Profile.DoesNotExist:
             return redirect('/')
 
@@ -153,7 +161,7 @@ def profile(request, username):
     return render(request, 'profile.html', {"profile": profile, "gigs": gigs})
 
 @login_required(login_url="/")
-def account(request, username):
+def account(request):
     # if request.method == 'POST':
     #     profile = Profile.objects.get(user=request.user)
     #     profile.about = request.POST['about']
@@ -209,9 +217,9 @@ def personal_info(request, username):
 def load_cities(request):
     country_id = request.GET.get('country_id')
     cities = City.objects.filter(country_id=country_id).all()
-    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
+    return render(request, 'dropdown_city_list_options.html', {'cities': cities})
 
 def load_areas(request):
     city_id = request.GET.get('city_id')
     areas = Area.objects.filter(city_id=city_id).all()
-    return render(request, 'area_dropdown_list_options.html', {'areas': areas})
+    return render(request, 'dropdown_area_list_options.html', {'areas': areas})

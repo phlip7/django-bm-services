@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  {% if error %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Warning!</strong> {{ error }}
+    </div>
+  {% endif %}
+
+  <section class="py-5">
+    <div class="container">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb pl-0  justify-content-start">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'my_gigs' %}">Mes Services</a></li>
+        <li class="breadcrumb-item active">Modification du Service   </li>
+      </ol>
+      <h1 class="hero-heading mb-0">Modification service</h1>
+      <p class="text-muted mb-5">Modifies ton service ici.</p>
+
+
+      <form method="POST" enctype="multipart/form-data"  id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
+        {% csrf_token %}
+
+        <div class="row form-block">
+          <div class="col-lg-4">
+            <h4>Basic</h4>
+            <p class="text-muted text-sm">Quel service veux-tu proposer ? </p>
+          </div>
+          <div class="col-lg-7 ml-auto">
+            <div class="form-group"></div>
+             <!-- Titre-->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Titre - Nom ou Titre du service</label>
+              <input class="form-control" type="text" name="title" id="id_title" value="{{ gig.title }}">
+            </div>
+             <!-- Category-->
+            <div class="form-group">
+              <label class="form-label" for="form_type">Categories</label>
+              <select class="selectpicker form-control" name="category" id="id_category" data-style="btn-selectpicker">
+                <option value="{{ gig.category.id }}" selected> {{ gig.category }} </option>
+                {% for category in categories %}  
+                  <option value="{{ category.id }}"> {{ category }} </option>
+                {% endfor %}
+              </select>
+              <small class="form-text text-muted" id="propertyTypeHelp">Choisis la catégorie qui se rapproche le plus de ton service. </small>
+            </div>
+            <!-- Description-->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Description</label>
+              <textarea rows="8" class="form-control" name="description" id="id_description">{{ gig.description }}</textarea>
+              <small class="form-text text-muted mt-2" id="descriptionHelp">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he thought. It wasn't a dream.    </small>
+            </div>
+             <!-- Price-->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Prix - CFA -</label>
+              <input type="number" class="form-control" name="price" id="id_price" value="{{ gig.price }}">
+            </div>
+             <!-- Photo-->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Photo</label>
+              <small>Photo actuelle : {{ gig.photo }}</small>
+              <input type="file" class="form-control" name="photo" id="id_photo">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
+            </div>
+          </div>
+        </div>
+        <div class="row form-block">
+          <div class="col-lg-4">
+            <h4>Localisation</h4>
+            <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où sera fourni ton service ? .</p>
+          </div>
+          <div class="col-lg-7 ml-auto">
+            <!-- Country-->
+            <div class="form-group">
+              <label class="form-label" for="form_country">Pays</label>
+              <select class="form-control" name="country" id="id_country">
+                <option value="{{ gig.country.id }}" selected> {{ gig.country }} </option>
+                {% for country in countries %}  
+                  <option value="{{ country.id }}"> {{ country }} </option>
+                {% endfor %}
+              </select>
+            </div>
+            <!-- City + Area-->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label" for="form_city">Ville</label>
+                  <select class="form-control" name="city" id="id_city">
+                    <option value="{{ gig.city.id }}" selected> {{ gig.city }} </option>
+                    {% for city in cities %}
+                      <option value="{{ city.id }}"> {{ city }} </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label" for="form_state">Quartier</label>
+                  <select class="form-control" name="area" id="id_area">
+                    <option value="{{ gig.area.id }}" selected> {{ gig.area }} </option>
+                    {% for area in areas %}
+                      <option value="{{ area.id }}"> {{ area }} </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- Street-->
+            <div class="form-group">
+              <label class="form-label" for="form_street">Adresse (optionnel)</label>
+              <input class="form-control" type="text" name="address" id="id_address" value="{{ gig.address }}">
+            </div>
+          </div>
+        </div>
+        <div class="row form-block">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="form_state">Statut de l'annonce</label>
+                <select class="form-control" name="status" id="id_status">
+                  <option value="{{ gig.status }}" selected> {% if gig.status %} Activé {% else %} Désactivé {% endif %}</option>
+                  <option value="True">Activé</option>
+                  <option value="False">Désactivé</option>
+                </select>
+              </div>
+            </div>        
+            <div class="container text-center"><button type="submit" class="btn btn-primary">Modifier</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+<!-- Below Ajax scripts to set dependent form dropdown values  -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_country").change(function () {
+        const url = $("#gigForm").attr("data-cities-url");  // get the url of the `load_cities` view
+        const countryId = $(this).val();  // get the selected country ID from the HTML input
+        
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'country_id': countryId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+                /*
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (city) {
+                    html_data += `<option value="${city.id}">${city.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_city").html(html_data);
+                */
+            }
+        });
+    });
+
+    $("#id_city").change(function () {
+        const url = $("#gigForm").attr("data-areas-url");  // get the url of the `load_cities` view
+        const cityId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'city_id': cityId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

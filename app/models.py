@@ -61,6 +61,10 @@ class Gig(models.Model):
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=True)
+    website_link = models.CharField(max_length=50, null=True)
+    facebook_link = models.CharField(max_length=500, null=True)
+    twitter_link = models.CharField(max_length=500, null=True)
+    instagram_link = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.title
