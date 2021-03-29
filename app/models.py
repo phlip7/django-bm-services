@@ -52,7 +52,7 @@ class Gig(models.Model):
     title = models.CharField(max_length=500)
     category = models.ForeignKey(GigCategory, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length=1000)
-    price = models.IntegerField(default=0)
+    price = models.CharField(max_length=500, default=0)
     photo = models.FileField(upload_to='gigs')
     status = models.BooleanField(default=True, choices=STATUS_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,3 +68,13 @@ class Gig(models.Model):
 
     def __str__(self):
         return self.title
+
+class Review(models.Model):
+    gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    rating_nb_bad = models.IntegerField()
+    comment = models.CharField(max_length=1000, null=True)
+
+    def __str__(self):
+        return self.comment

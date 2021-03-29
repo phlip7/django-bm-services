@@ -31,7 +31,7 @@
             </div>
             <div class="text-block">
               <!-- Listing Location-->
-              <h3 class="mb-4">Location</h3>
+              <h3 class="mb-4">Localisation</h3>
               <div class="map-wrapper-300 mb-3">
                 <div class="h-100" id="detailMap"></div>
               </div>
@@ -50,7 +50,7 @@
 
             <div class="text-block">
               <!-- Gallery-->
-              <h3 class="mb-4">Gallery</h3>
+              <h3 class="mb-4">Gallerie</h3>
               <div class="row gallery ml-n1 mr-n1">
                 <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}" alt="..."></a></div>
                 <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}" alt="..."></a></div>
@@ -98,61 +98,69 @@
               </ul>
             </div>
             <div class="text-block">
-              <p class="subtitle text-sm text-primary">Reviews    </p>
-              <h5 class="mb-4">Listing Reviews </h5>
-              <div class="media d-block d-sm-flex review">
-                <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-8.jpg' %}" alt="Padmé Amidala"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
-                <div class="media-body">
-                  <h6 class="mt-2 mb-1">Padmé Amidala</h6>
-                  <div class="mb-2"><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i>
+              <p class="subtitle text-sm text-primary">Commentaires    </p>
+              <h5 class="mb-4">Liste des Commentaires </h5>
+
+              {% for review in reviews %}
+                <div class="media d-block d-sm-flex review">
+                  <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-2.jpg' %}" alt="Luke Skywalker"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
+                  <div class="media-body">
+                    <h6 class="mt-2 mb-1"> {{ review.user.first_name }} {{ review.user.last_name }} </h6>
+                    <div class="mb-2">
+
+                      {% with ''|center:review.rating as good_points %}
+                      {% for _ in good_points %}
+                          <i class="fa fa-xs fa-star text-primary"></i>
+                      {% endfor %}
+                      {% endwith %}
+
+                      {% with ''|center:review.rating_nb_bad as bad_points %}
+                      {% for _ in bad_points %}
+                          <i class="fa fa-xs fa-star text-gray-200"></i>
+                      {% endfor %}
+                      {% endwith %}
+
+                    </div>
+                    <p class="text-muted text-sm"> {{ review.comment }} </p>
                   </div>
-                  <p class="text-muted text-sm">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections     </p>
                 </div>
-              </div>
-              <div class="media d-block d-sm-flex review">
-                <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-2.jpg' %}" alt="Luke Skywalker"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
-                <div class="media-body">
-                  <h6 class="mt-2 mb-1">Luke Skywalker</h6>
-                  <div class="mb-2"><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-gray-200"></i>
-                  </div>
-                  <p class="text-muted text-sm">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he thought. It wasn't a dream.     </p>
-                </div>
-              </div>
+              {% endfor %}
+
+
               <div class="py-5">
                 <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#leaveReview" aria-expanded="false" aria-controls="leaveReview">Laisser un commentaire</button>
                 <div class="collapse mt-4" id="leaveReview">
-                  <h5 class="mb-4">Laisser un commentaire</h5>
-                  <form class="form" id="contact-form" method="get" action="#">
+                  
+                  {% if user and not user.is_anonymous %}
+                  <p class="text-muted text-sm">Si tu as déjà reçu les services de <b class="mt-2 mb-1"> {{ gig.user.first_name }} </b>, donnes nous ton avis sur la qualité de ses services  </p>
+     
+                  <form class="form" id="review-form" method="POST">
+                  {% csrf_token %}
                     <div class="row">
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label class="form-label" for="name">Your name *</label>
-                          <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required="required">
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="form-label" for="rating">Your rating *</label>
-                          <select class="custom-select focus-shadow-0" name="rating" id="rating">
-                            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5/5)</option>
-                            <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734; (4/5)</option>
-                            <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734; (3/5)</option>
-                            <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2/5)</option>
-                            <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1/5)</option>
+                          <label class="form-label" for="rating">Ta Note *</label>
+                          <select class="custom-select focus-shadow-0" name="rating" id="rating" required="required">
+                            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5/5) Excellent</option>
+                            <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734; (4/5) Bon</option>
+                            <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734; (3/5) Moyen</option>
+                            <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2/5) Mauvais</option>
+                            <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1/5) Très Mauvais</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="email">Your email *</label>
-                      <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" required="required">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="review">Review text *</label>
-                      <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
+                      <label class="form-label" for="review">Ton Commentaire *</label>
+                      <textarea class="form-control" rows="4" name="comment" id="comment" placeholder="Enter your review"></textarea>
                     </div>
                     <button class="btn btn-primary" type="submit">Publier</button>
                   </form>
+
+                  {% else %}
+                  <h5 class="text-sm"><a href="{% url 'signin' %}">Connectes toi d'abord pour laisser un commentaire <i class="fa fa-long-arrow-alt-right ml-2"></i></a></h5>
+                  {% endif %}
+
                 </div>
               </div>
             </div>

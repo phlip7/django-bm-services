@@ -20,14 +20,6 @@
       <p class="subtitle text-primary">Creation d'un nouveau service</p>
       <h1 class="h2 mb-5"> Basic information <span class="text-muted float-right">Step 1</span>      </h1>
  
-    {% comment %} 
-     <h2>Person Form</h2>
-        <form method="post" id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-        </form> {% endcomment %}
-
       <form method="POST" enctype="multipart/form-data"  id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
         {% csrf_token %}
 

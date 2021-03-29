@@ -21,6 +21,8 @@ class CreateUserForm(UserCreationForm):
 
 class GigForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':8}))
+    address = forms.CharField(required=False)
+
     class Meta:
         model = Gig
         #fields = '__all__'

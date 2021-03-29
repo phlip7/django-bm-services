@@ -36,10 +36,10 @@
                 <hr>
                 <h6>{{ profile.user.first_name }} a fourni</h6>
                 <ul class="card-text text-muted">
-                  <li>Government ID</li>
-                  <li>Email address</li>
-                  <li>Phone number</li>
+                  {% if profile.phone %} <li> Numero Telephone </li> {% endif %}
+                  {% if profile.user.email %} <li> Email </li> {% endif %}
                 </ul>
+                <small class="form-text text-muted" id="propertyTypeHelp">details disponibles dans les services </small>
               </div>
             </div>
           </div>
@@ -93,66 +93,7 @@
               {% endfor %}
               </div>
             </div>
-            <div class="text-block">
-              <p class="subtitle text-sm text-primary">Commentaires    </p>
-              <h6 class="mb-4">Commentaires laissés par les clients </h6>
-              <div class="media d-block d-sm-flex review">
-                <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-8.jpg' %}" alt="Padmé Amidala"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
-                <div class="media-body">
-                  <h6 class="mt-2 mb-1">Padmé Amidala</h6>
-                  <div class="mb-2"><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i>
-                  </div>
-                  <p class="text-muted text-sm">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections     </p>
-                </div>
-              </div>
-              <div class="media d-block d-sm-flex review">
-                <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-2.jpg' %}" alt="Luke Skywalker"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
-                <div class="media-body">
-                  <h6 class="mt-2 mb-1">Luke Skywalker</h6>
-                  <div class="mb-2"><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-primary"></i><i class="fa fa-xs fa-star text-gray-200"></i>
-                  </div>
-                  <p class="text-muted text-sm">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he thought. It wasn't a dream.     </p>
-                </div>
-              </div>
-
-              <div class="py-5">
-                <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#leaveReview" aria-expanded="false" aria-controls="leaveReview">Laisser un commentaire</button>
-                <div class="collapse mt-4" id="leaveReview">
-                  <h5 class="mb-4">Laisser un commentaire</h5>
-                  <form class="form" id="contact-form" method="get" action="#">
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="form-label" for="name">Your name *</label>
-                          <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required="required">
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="form-label" for="rating">Your rating *</label>
-                          <select class="custom-select focus-shadow-0" name="rating" id="rating">
-                            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5/5)</option>
-                            <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734; (4/5)</option>
-                            <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734; (3/5)</option>
-                            <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2/5)</option>
-                            <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1/5)</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="email">Your email *</label>
-                      <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" required="required">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="review">Review text *</label>
-                      <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Poster</button>
-                  </form>
-                </div>
-              </div>
-            </div>
+            <div class="text-block"></div>
           </div>
         </div>
       </div>

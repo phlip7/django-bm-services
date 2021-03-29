@@ -75,29 +75,25 @@ def contact(request):
     return render(request, 'contact.html')
 
 def gig_detail(request, id):
-    # if request.method == 'POST' and \
-    #     not request.user.is_anonymous() and \
-    #     Purchase.objects.filter(gig_id=id, buyer=request.user).count() > 0 and \
-    #     'content' in request.POST and \
-    #     request.POST['content'].strip() != '':
-    #     Review.objects.create(content=request.POST['content'], gig_id=id, user=request.user)
-
     try:
         gig = Gig.objects.get(id=id)
     except Gig.DoesNotExist:
         return redirect('/')
+    
+    if request.method == 'POST' and \
+        not request.user.is_anonymous and \
+        ('rating' in request.POST or 'review' in request.POST) and \
+        request.POST['rating'].strip() != '':
+        Review.objects.create(
+            rating=request.POST['rating'], 
+            rating_nb_bad= 5 - int(request.POST['rating']), 
+            comment=request.POST['comment'], 
+            gig_id=id, 
+            user=request.user)
+        return redirect('gig_detail', id=gig.id)
 
-    # if request.user.is_anonymous() or \
-    #     Purchase.objects.filter(gig=gig, buyer=request.user).count() == 0 or \
-    #     Review.objects.filter(gig=gig, user=request.user).count() > 0:
-    #     show_post_review = False
-    # else:
-    #     show_post_review = Purchase.objects.filter(gig=gig, buyer=request.user).count() > 0
-
-    #reviews = Review.objects.filter(gig=gig)
-    #client_token = braintree.ClientToken.generate()
-    #return render(request, 'gig_detail.html', {"show_post_review": show_post_review ,"reviews": reviews, "gig": gig, "client_token": client_token})
-    return render(request,  'gig-detail.html', {"gig": gig})
+    reviews = Review.objects.filter(gig=gig)
+    return render(request,  'gig-detail.html', {"gig": gig, "reviews": reviews})
 
 @login_required(login_url="signin")
 def gig_create(request):
@@ -139,41 +135,25 @@ def gig_edit(request, id):
         return redirect('/')
 
 @login_required(login_url="/")
-def my_gigs(request):
+def gig_mygigs(request):
     gigs = Gig.objects.filter(user=request.user)
-    return render(request, 'my-gigs.html', {"gigs": gigs})
+    return render(request, 'gig-mygigs.html', {"gigs": gigs})
 
-@login_required(login_url="/")
+def gig_search(request):
+    gigs = Gig.objects.filter(title__contains=request.GET['title'])
+    return render(request, 'home.html', {"gigs": gigs})
+
 def profile(request, username):
-    if request.method == 'POST':
-        profile = Profile.objects.get(user=request.user)
-        profile.about = request.POST['about']
-        profile.slogan = request.POST['slogan']
-        #profile.save()
-    else:
-        try:
-            profile = Profile.objects.get(user__username=username)
-            print(profile)
-        except Profile.DoesNotExist:
-            return redirect('/')
+    try:
+        profile = Profile.objects.get(user__username=username)
+    except Profile.DoesNotExist:
+        return redirect('/')
 
     gigs = Gig.objects.filter(user=profile.user, status=True)
     return render(request, 'profile.html', {"profile": profile, "gigs": gigs})
 
 @login_required(login_url="/")
 def account(request):
-    # if request.method == 'POST':
-    #     profile = Profile.objects.get(user=request.user)
-    #     profile.about = request.POST['about']
-    #     profile.slogan = request.POST['slogan']
-    #     profile.save()
-    # else:
-    #     try:
-    #         profile = Profile.objects.get(user__username=username)
-    #     except Profile.DoesNotExist:
-    #         return redirect('/')
-
-    # gigs = Gig.objects.filter(user=profile.user, status=True)
     return render(request, 'account.html')
 
 @login_required(login_url="/")
@@ -196,15 +176,18 @@ def personal_info(request, username):
             profile.birthyear = request.POST['birthyear']
             profile.phone = request.POST['phone']
             profile.save()
+            return redirect('personal_info', username)
         elif form_id == 'addr':
             profile.address = request.POST['address']
             profile.country = Country.objects.get(name = request.POST['country'])
             profile.city = City.objects.get(name = request.POST['city'])
-            profile.save()    
+            profile.save()
+            return redirect('personal_info', username)
         elif form_id == 'profl':
             profile.about = request.POST['about']
             profile.slogan = request.POST['slogan']
             profile.save()
+            return redirect('personal_info', username)
     else:
         try:
             profile = Profile.objects.get(user__username=username)
