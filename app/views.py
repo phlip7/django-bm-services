@@ -5,13 +5,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, GigForm
+from django.db.models import Q
 from .models import *
 
 
 # Create your views here.
 def home(request):
     gigs = Gig.objects.filter(status=True)
-    return render(request, 'home.html', {"gigs": gigs})
+    cities =  City.objects.all()
+    categories =  GigCategory.objects.all()
+    return render(request, 'home.html', {"gigs": gigs, 'cities': cities, 'categories': categories})
 
 def signup(request):
     if request.user.is_authenticated:
@@ -140,8 +143,24 @@ def gig_mygigs(request):
     return render(request, 'gig-mygigs.html', {"gigs": gigs})
 
 def gig_search(request):
-    gigs = Gig.objects.filter(title__contains=request.GET['title'])
-    return render(request, 'home.html', {"gigs": gigs})
+    countries =  Country.objects.all()
+    cities =  City.objects.all()
+    areas =  Area.objects.all()
+    categories =  GigCategory.objects.all()
+    location = request.GET.get('location')
+    title = request.GET.get('title')
+
+    print(title)
+    print(location)
+
+    if location and title :
+        gigs = Gig.objects.filter(title__contains=title, city=location)
+    elif location or title :
+        gigs = Gig.objects.filter(Q(title__contains=title) | Q(city=location))
+    
+    print(gigs)
+    return render(request, 'gig-search.html', {"gigs": gigs})
+    #return render(request, 'home.html')
 
 def profile(request, username):
     try:

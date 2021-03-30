@@ -21,28 +21,30 @@
             </div>
 
             <div class="search-bar mt-5 p-3 p-lg-1 pl-lg-4">
-              <form action="#">
+
+              <form role="gig_search" method="GET" action="/gig_search/">
                 <div class="row">
-                  <div class="col-lg-4 d-flex align-items-center form-group">
-                    <input class="form-control border-0 shadow-0" type="text" name="search" placeholder="Quel metier recherches tu?">
+                  <div class="col-lg-6 d-flex align-items-center form-group">
+                    <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?">
                   </div>
-                  <div class="col-lg-3 d-flex align-items-center form-group">
+
+                  <div class="col-lg-4 d-flex align-items-center form-group">
                     <div class="input-label-absolute input-label-absolute-right w-100">
                       <label class="label-absolute" for="location"><i class="fa fa-crosshairs"></i><span class="sr-only">City</span></label>
-                      <input class="form-control border-0 shadow-0" type="text" name="location" placeholder="Localisation" id="location">
+                      <select class="selectpicker" title="Localisation" name="location" id="location" data-style="btn-form-control">
+                        {% for city in cities %}
+                          {% if forloop.first %}
+                            <option value="{{ city.id }}" selected> {{ city }} </option>
+                          {% endif %}
+                          <option value="{{ city.id }}"> {{ city }} </option>
+                        {% endfor %}
+                      </select>
                     </div>
                   </div>
-                  <div class="col-lg-3 d-flex align-items-center form-group no-divider">
-                    <select class="selectpicker" title="Categories" data-style="btn-form-control">
-                      <option value="small">Restaurants</option>
-                      <option value="medium">Hotels</option>
-                      <option value="large">Cafes</option>
-                      <option value="x-large">Garages</option>
-                    </select>
-                  </div>
+                  
                   <div class="col-lg-2">
-                    <!--<button class="btn btn-primary btn-block rounded-xl h-100" type="submit">Go</button> -->
-                    <a class="btn btn-primary btn-block rounded-xl h-100" href="category-2.html">Go</a>
+                    <button class="btn btn-primary btn-block rounded-xl h-100" type="submit">Go</button> 
+                    <!--<a class="btn btn-primary btn-block rounded-xl h-100" href="{% url 'gig_search' %}">Go</a> -->
                   </div>
                 </div>
               </form>

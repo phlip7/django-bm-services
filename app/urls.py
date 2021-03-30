@@ -11,6 +11,7 @@ urlpatterns = [
     path('gig_mygigs/', views.gig_mygigs, name='gig_mygigs'),
     path('gig_create/', views.gig_create, name="gig_create"),
     re_path(r'^gig_edit/(?P<id>[0-9]+)/$', views.gig_edit, name='gig_edit'),
+    re_path(r'^gig_search/$', views.gig_search, name='gig_search'),
     re_path(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
     path('account/', views.account, name='account'),
     #re_path(r'^account/(?P<username>\w+)/$', views.account, name='account'),
