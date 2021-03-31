@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, GigForm
 from django.db.models import Q
 from .models import *
+from .filters import GigFilter
 
 
 # Create your views here.
@@ -14,7 +15,8 @@ def home(request):
     gigs = Gig.objects.filter(status=True)
     cities =  City.objects.all()
     categories =  GigCategory.objects.all()
-    return render(request, 'home.html', {"gigs": gigs, 'cities': cities, 'categories': categories})
+    gig_filter = GigFilter(request.GET, queryset=gigs)
+    return render(request, 'home.html', {"gigs": gigs, 'cities': cities, 'categories': categories, 'gig_filter': gig_filter})
 
 def signup(request):
     if request.user.is_authenticated:
@@ -147,19 +149,21 @@ def gig_search(request):
     cities =  City.objects.all()
     areas =  Area.objects.all()
     categories =  GigCategory.objects.all()
-    location = request.GET.get('location')
-    title = request.GET.get('title')
+    gigs =  Gig.objects.all()
 
-    print(title)
-    print(location)
-
-    if location and title :
-        gigs = Gig.objects.filter(title__contains=title, city=location)
-    elif location or title :
-        gigs = Gig.objects.filter(Q(title__contains=title) | Q(city=location))
+    # if request.method == 'GET' and request.GET.get('form_id')=='gsearch':
+    #     location = request.GET.get('location')
+    #     title = request.GET.get('title')
+    #     if location and title :
+    #         gigs = Gig.objects.filter(title__contains=title, city=location)
+    #     elif location or title :
+    #         gigs = Gig.objects.filter(Q(title__contains=title) | Q(city=location))
     
-    print(gigs)
-    return render(request, 'gig-search.html', {"gigs": gigs})
+    gig_filter = GigFilter(request.GET, queryset=gigs)
+    gigs = gig_filter.qs
+
+    context = {"gigs": gigs, 'countries': countries, 'cities': cities, 'areas': areas, 'categories': categories, 'gig_filter': gig_filter}
+    return render(request, 'gig-search.html', context)
     #return render(request, 'home.html')
 
 def profile(request, username):

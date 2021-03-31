@@ -23,9 +23,11 @@
             <div class="search-bar mt-5 p-3 p-lg-1 pl-lg-4">
 
               <form role="gig_search" method="GET" action="/gig_search/">
+                <input class="form-control" type="hidden" name="form_id" id="form_id" value="gsearch">
                 <div class="row">
                   <div class="col-lg-6 d-flex align-items-center form-group">
                     <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?">
+                    {{ gig_filter.form.title }}
                   </div>
 
                   <div class="col-lg-4 d-flex align-items-center form-group">
