@@ -32,7 +32,7 @@
                   <td> {{ gig.description|slice:"0:100" }}... </td>
                   <td class="text-right"> {{ gig.price }} </td>
                   <td class="text-center"><a class="btn btn-warning" href="{% url 'gig_edit' gig.id %}">Modifier</a></td>
-                  <td class="text-center"><a class="btn btn-danger" href="">Supprimer</a></td>
+                  <td class="text-center"><a class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmDelete" href="">Supprimer</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -40,5 +40,25 @@
           </div>
         </div>
       </div>
-    </section>  
+    </section> 
+    <!-- Modal -->
+    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="modalConfirmDeleteLabelß" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Es-tu de vouloir supprimer le service ? 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Non - Annuler</button>
+            <button type="button" class="btn btn-danger">Oui</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

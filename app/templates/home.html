@@ -26,21 +26,14 @@
                 <input class="form-control" type="hidden" name="form_id" id="form_id" value="gsearch">
                 <div class="row">
                   <div class="col-lg-6 d-flex align-items-center form-group">
-                    <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?">
+                    <!-- <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?"> -->
                     {{ gig_filter.form.title }}
                   </div>
 
                   <div class="col-lg-4 d-flex align-items-center form-group">
                     <div class="input-label-absolute input-label-absolute-right w-100">
                       <label class="label-absolute" for="location"><i class="fa fa-crosshairs"></i><span class="sr-only">City</span></label>
-                      <select class="selectpicker" title="Localisation" name="location" id="location" data-style="btn-form-control">
-                        {% for city in cities %}
-                          {% if forloop.first %}
-                            <option value="{{ city.id }}" selected> {{ city }} </option>
-                          {% endif %}
-                          <option value="{{ city.id }}"> {{ city }} </option>
-                        {% endfor %}
-                      </select>
+                      {{ gig_filter.form.city }}
                     </div>
                   </div>
                   
@@ -114,15 +107,17 @@
           <div class="swiper-wrapper pb-5">
             <!-- Slides-->
 
-            {% for gig in gigs %}
+            {% for gig in gigs %}  
             <div class="swiper-slide h-auto px-2">
               <!-- place item-->
               <div class="w-100 h-100 hover-animate" data-marker-id="{{ gig.id }}">
                 <div class="card h-100 border-0 shadow">
-                  <div class="card-img-top overflow-hidden gradient-overlay"> 
-                    <img class="img-fluid" src="{% static 'img/photo/photo-1484154218962-a197022b5858.jpg' %}" alt="{{ gig.title }}"/><a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
+                  <div class="card-img-top overflow-hidden gradient-overlay" style="height: 17vw; object-fit: cover;"> <!-- <div class="card-img-top overflow-hidden gradient-overlay"> -->
+                    <img class="img-fluid" src="/media/{{ gig.photo }}" alt="{{ gig.title }}"/> <!-- <img class="img-fluid" src="{% static 'img/photo/photo-1484154218962-a197022b5858.jpg' %}" alt="{{ gig.title }}"/> -->
+                    <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
                     <div class="card-img-overlay-bottom z-index-20">
-                      <div class="media text-white text-sm align-items-center"><img class="avatar avatar-border-white mr-2" src="{% static 'img/avatar/avatar-0.jpg' %}" alt="{{ gig.title }}"/>
+                      <div class="media text-white text-sm align-items-center">
+                        <img class="avatar avatar-border-white mr-2" src="/media/{{ gig.user.profile.avatar }}" alt="{{ gig.title }}"/>
                         <div class="media-body"> {{ gig.user.first_name }}</div>
                       </div>
                     </div>
@@ -194,4 +189,21 @@
       </div>
     </section>
 
+  <script>
+		//Query All input fields
+		var form_fields = document.getElementsByTagName('input')
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control border-0 shadow-0'
+		}
+
+    var form_select = document.getElementsByTagName('select')
+    for (var sel_field in form_select){	
+			form_select[sel_field].className += ' selectpicker'
+		}
+    // replace default value (------) for select options
+    var e = document.getElementById("id_city");
+    document.getElementById('id_city').options[e.selectedIndex].text='Ville ?';
+    // set placeholder for gig title form input 
+    form_fields[2].placeholder='Quel métier recherches tu ?';
+	</script>
 {% endblock %}

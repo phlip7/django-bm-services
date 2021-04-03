@@ -25,7 +25,7 @@ class Area(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.CharField(max_length=500, null=True)
+    avatar = models.FileField(upload_to='avatars', default='avatars/avatar-default-1.jpeg')
     about = models.CharField(max_length=1000, null=True)
     slogan = models.CharField(max_length=500, null=True)
     birthyear = models.IntegerField(null=True) 
@@ -53,7 +53,7 @@ class Gig(models.Model):
     category = models.ForeignKey(GigCategory, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length=1000)
     price = models.CharField(max_length=500, default=0)
-    photo = models.FileField(upload_to='gigs')
+    photo = models.FileField(upload_to='gigs', default='gigs/baramogo-default-gig-1.jpeg')
     status = models.BooleanField(default=True, choices=STATUS_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=timezone.now)

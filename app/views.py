@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from .forms import CreateUserForm, GigForm
 from django.db.models import Q
 from .models import *
@@ -60,17 +61,22 @@ def signin(request):
 		if request.method == 'POST':
 			email = request.POST.get('email')
 			password = request.POST.get('password')
-			username = User.objects.get(email=email.lower()).username
-			user = authenticate(request, username=username, password=password)
 
-			if user is not None:
-				login(request, user)
-				return redirect('home')
-			else:
-				messages.info(request, 'Username OR password is incorrect')
+			print('inci-1')
+			try:
+				username = User.objects.get(email=email.lower()).username
+				user = authenticate(request, username=username, password=password)
+				if user is not None:
+				    login(request, user)
+				    return redirect('home')
+				else:
+				    messages.info(request, 'email OU mot de passe incorrect')
+				    return redirect('signin')
+			except User.DoesNotExist:
+				messages.info(request, 'email OU mot de passe incorrect')
+				return redirect('signin')
 
-		context = {}
-		return render(request, 'signin.html', context)
+		return render(request, 'signin.html')
 
 def disconnect(request):
 	logout(request)
@@ -109,7 +115,7 @@ def gig_create(request):
             gig = gig_form.save(commit=False)
             gig.user = request.user
             gig.save()
-            return redirect('my_gigs')
+            return redirect('gig_mygigs')
         else:
             error = "Données non valides"
 
@@ -130,7 +136,7 @@ def gig_edit(request, id):
             print(gig_form)
             if gig_form.is_valid():
                 gig.save()
-                return redirect('my_gigs')
+                return redirect('gig_mygigs')
             else:
                 print(messages.error)
                 error = "Data is not valid"
@@ -209,6 +215,13 @@ def personal_info(request, username):
         elif form_id == 'profl':
             profile.about = request.POST['about']
             profile.slogan = request.POST['slogan']
+            if request.FILES['avatar']:
+                avatar = request.FILES['avatar']
+                print(avatar)
+                profile.avatar = avatar 
+                #fs = FileSystemStorage(location='avatars/')
+                #filename = fs.save(avatar.name, avatar)
+                #print(fs.url(filename))
             profile.save()
             return redirect('personal_info', username)
     else:

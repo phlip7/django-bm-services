@@ -14,7 +14,6 @@ urlpatterns = [
     re_path(r'^gig_search/$', views.gig_search, name='gig_search'),
     re_path(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
     path('account/', views.account, name='account'),
-    #re_path(r'^account/(?P<username>\w+)/$', views.account, name='account'),
     re_path(r'^personal_info/(?P<username>\w+)/$', views.personal_info, name='personal_info'),
 
     path('ajax/load-cities/', views.load_cities, name='ajax_load_cities'), # AJAX

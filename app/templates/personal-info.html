@@ -28,7 +28,8 @@
                 <i class="fa fa-id-card fa-fw mr-2"></i>{{ user.first_name }} {{ user.last_name }}<br>
                 <i class="fa fa-birthday-cake fa-fw mr-2"></i> {{ profile.birthyear }} <br>
                 <i class="fa fa-envelope-open fa-fw mr-2"></i>{{ user.email }}  <span class="mx-2"> | </span>  
-                <i class="fa fa-phone fa-fw mr-2"></i>{{ profile.phone }} </p>
+                <i class="fa fa-phone fa-fw mr-2"></i>{{ profile.phone }} 
+              </p>
               
               <div class="collapse" id="personalDetails">
                 <form method="POST">
@@ -121,6 +122,14 @@
                   <button class="btn btn-link pl-0 text-primary collapsed" type="button" data-toggle="collapse" data-target="#profil" aria-expanded="false" aria-controls="address">Modifier</button>
                 </div>
               </div>
+
+              <div class="col-sm-9 media text-sm text-muted">
+                <h6>Photo de profil</h6>
+              </div>
+              <div class="media text-sm text-muted"> 
+                <div class="media-body mt-n1"><a class="d-inline-block" href="#"><img class="d-block avatar avatar-xxl p-2 mb-2" src="/media/{{ profile.avatar }}" alt=""></a></div>
+              </div>
+              <br/>
               <div class="col-sm-9 media text-sm text-muted">
                 <h6>Qui est-tu ?</h6>
               </div>
@@ -135,10 +144,16 @@
                 <div class="media-body mt-n1">{{ profile.slogan }}</div>
               </div>
               <div class="collapse" id="profil">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="row pt-4">
                     <input class="form-control" type="hidden" name="form_id" id="form_id" value="profl">
+                    <div class="form-group col-md-12">
+                      <label class="form-label" for="about">Photo Profil (Ajoutes une photo de toi)</label>
+                      <input type="file" class="form-control" name="avatar" id="id_avatar">
+                    </div>
+                  </div>
+                  <div class="row pt-4">
                     <div class="form-group col-md-12">
                       <label class="form-label" for="about">Qui es-tu (Décris toi en quelques phrases)</label>
                       <textarea class="form-control" type="text" name="about" id="about" rows="5"> {{ profile.about }} </textarea>

@@ -1,10 +1,11 @@
 import django_filters
+from django.forms.widgets import TextInput
 from django_filters import CharFilter
 
 from .models import Gig
 
 class GigFilter(django_filters.FilterSet):
-	title = CharFilter(field_name='title', lookup_expr='icontains')
+	title = CharFilter(field_name='title', lookup_expr='icontains', widget=TextInput(attrs={'placeholder': 'Métier'}))
 
 	class Meta:
 		model = Gig
