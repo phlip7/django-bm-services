@@ -26,7 +26,7 @@ class GigForm(forms.ModelForm):
     class Meta:
         model = Gig
         #fields = '__all__'
-        fields = ['title', 'category', 'description', 'price', 'photo', 'status', 'country', 'city', 'area', 'address']
+        fields = ['title', 'category', 'description', 'price', 'photo', 'status', 'country', 'city', 'locality', 'area', 'subarea', 'address']
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

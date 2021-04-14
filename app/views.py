@@ -91,6 +91,17 @@ def gig_detail(request, id):
     except Gig.DoesNotExist:
         return redirect('/')
     
+    #'''set the 1st not null locations elements. Example: if the subarea have no location, take the area location. And so on ...'''
+    gig_geoloc = None
+    locations = [gig.subarea.ggeoloc_url, gig.area.ggeoloc_url, gig.locality.ggeoloc_url, gig.city.ggeoloc_url] 
+    for loc_elt in locations:
+        if loc_elt is not None or loc_elt != '':
+            print(loc_elt)
+            gig_geoloc = loc_elt
+            break
+
+    geoloc_display = '''<iframe src="{}" width="610" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>'''.format(gig_geoloc)
+
     if request.method == 'POST' and \
         not request.user.is_anonymous and \
         ('rating' in request.POST or 'review' in request.POST) and \
@@ -104,7 +115,7 @@ def gig_detail(request, id):
         return redirect('gig_detail', id=gig.id)
 
     reviews = Review.objects.filter(gig=gig)
-    return render(request,  'gig-detail.html', {"gig": gig, "reviews": reviews})
+    return render(request,  'gig-detail.html', {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews})
 
 @login_required(login_url="signin")
 def gig_create(request):
@@ -238,7 +249,18 @@ def load_cities(request):
     cities = City.objects.filter(country_id=country_id).all()
     return render(request, 'dropdown_city_list_options.html', {'cities': cities})
 
-def load_areas(request):
+def load_localities(request):
     city_id = request.GET.get('city_id')
-    areas = Area.objects.filter(city_id=city_id).all()
+    localities = Locality.objects.filter(city_id=city_id).all()
+    return render(request, 'dropdown_locality_list_options.html', {'localities': localities})
+
+def load_areas(request):
+    locality_id = request.GET.get('locality_id')
+    areas = Area.objects.filter(locality_id=locality_id).all()
     return render(request, 'dropdown_area_list_options.html', {'areas': areas})
+
+def load_subareas(request):
+    area_id = request.GET.get('area_id')
+    subareas = SubArea.objects.filter(area_id=area_id).all()
+    print(subareas)
+    return render(request, 'dropdown_subarea_list_options.html', {'subareas': subareas})

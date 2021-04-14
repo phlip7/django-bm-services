@@ -9,7 +9,7 @@
           <div class="text-white mb-4 mb-lg-0">
             <div class="badge badge-pill badge-transparent px-3 py-2 mb-4"> {{ gig.category }} </div>
             <h1 class="text-shadow verified"> {{ gig.title }} </h1>
-            <p><i class="fa-map-marker-alt fas mr-2"></i> {{ gig.city }}, {{ gig.area }} / {{ gig.address }} </p>
+            <p><i class="fa-map-marker-alt fas mr-2"></i> {{ gig.city }}, {{ gig.locality }}, {{ gig.area }}, {{ gig.subarea }} / {{ gig.address }} </p>
             <p class="mb-0 d-flex align-items-center">
               <i class="fa fa-xs fa-star text-primary"></i>
               <i class="fa fa-xs fa-star text-primary"></i>
@@ -38,7 +38,20 @@
               <!-- Listing Location-->
               <h3 class="mb-4">Localisation</h3>
               <div class="map-wrapper-300 mb-3">
-                <div class="h-100" id="detailMap"></div>
+                <div class="h-100" id="detailMap">
+                <!-- 
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d993.0733133557775!2d-3.982023570753184!3d5.3721732349705125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1ecaf3df2c289%3A0x71b3be97bff9d2cc!2sABRI%202000%2C%20Abidjan%2C%20C%C3%B4te%20d&#39;Ivoire!5e0!3m2!1sfr!2sca!4v1618365735751!5m2!1sfr!2sca" 
+                  width="610" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
+
+                {{ geoloc_display  |safe }}
+                
+                <!--   
+                  https://developers.google.com/maps/documentation/embed/get-api-key
+                  https://developers.google.com/maps/documentation/embed/map-generator#create-project
+                  https://www.sterlingsky.ca/why-you-should-embed-a-google-map-on-your-website/
+                -->
+                
+                </div>
               </div>
             </div>
             <div class="text-block">

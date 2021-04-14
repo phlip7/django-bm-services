@@ -5,6 +5,7 @@ from django.utils import timezone
 # Create your models here.
 class Country(models.Model):
     name = models.CharField(max_length=30)
+    ggeoloc_url = models.CharField(max_length=1000, null=True)
 
     def __str__(self):
         return self.name
@@ -12,13 +13,31 @@ class Country(models.Model):
 class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
+    ggeoloc_url = models.CharField(max_length=1000, null=True)
 
     def __str__(self):
         return self.name
-    
-class Area(models.Model):
+
+class Locality(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    ggeoloc_url = models.CharField(max_length=1000, null=True)
+
+    def __str__(self):
+        return self.name
+
+class Area(models.Model):
+    locality = models.ForeignKey(Locality, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    ggeoloc_url = models.CharField(max_length=1000, null=True)
+
+    def __str__(self):
+        return self.name
+
+class SubArea(models.Model):
+    area = models.ForeignKey(Area, on_delete=models.CASCADE)
     name = models.CharField(max_length=70)
+    ggeoloc_url = models.CharField(max_length=1000, null=True)
 
     def __str__(self):
         return self.name
@@ -59,7 +78,9 @@ class Gig(models.Model):
     create_time = models.DateTimeField(default=timezone.now)
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+    locality = models.ForeignKey(Locality, on_delete=models.SET_NULL, null=True)
     area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True)
+    subarea = models.ForeignKey(SubArea, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=True)
     website_link = models.CharField(max_length=50, null=True)
     facebook_link = models.CharField(max_length=500, null=True)

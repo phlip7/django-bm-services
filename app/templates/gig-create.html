@@ -20,7 +20,11 @@
       <p class="subtitle text-primary">Creation d'un nouveau service</p>
       <h1 class="h2 mb-5"> Basic information <span class="text-muted float-right">Step 1</span>      </h1>
  
-      <form method="POST" enctype="multipart/form-data"  id="gigForm" data-cities-url="{% url 'ajax_load_cities' %}" data-areas-url="{% url 'ajax_load_areas' %}">
+      <form method="POST" enctype="multipart/form-data"  id="gigForm" 
+        data-cities-url="{% url 'ajax_load_cities' %}" 
+        data-localities-url="{% url 'ajax_load_localities' %}"
+        data-areas-url="{% url 'ajax_load_areas' %}" 
+        data-subareas-url="{% url 'ajax_load_subareas' %}" >
         {% csrf_token %}
 
         <div class="row form-block">
@@ -66,7 +70,7 @@
               <label class="form-label" for="form_country">Pays</label>
               {{ form.country }}
             </div>
-            <!-- City + Area-->
+            <!-- City + Locality -->
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -76,8 +80,23 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label" for="form_state">Quartier</label>
+                  <label class="form-label" for="form_state">Commune</label>
+                  {{ form.locality }}
+                </div>
+              </div>
+            </div>
+            <!-- Area + SubArea-->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label" for="form_city">Quartier</label>
                   {{ form.area }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label" for="form_state">Quartier - Zone</label>
+                  {{ form.subarea }}
                 </div>
               </div>
             </div>
@@ -128,16 +147,44 @@
     });
 
     $("#id_city").change(function () {
-        const url = $("#gigForm").attr("data-areas-url");  // get the url of the `load_cities` view
-        const cityId = $(this).val();  // get the selected country ID from the HTML input
-
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+        const url = $("#gigForm").attr("data-localities-url"); 
+        const cityId = $(this).val(); 
+        $.ajax({                      
+            url: url,                 
             data: {
-                'city_id': cityId       // add the country id to the GET parameters
+                'city_id': cityId  
             },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+            success: function (data) {  
+                $("#id_locality").html(data); 
+            }
+        });
+    });
+
+    $("#id_locality").change(function () {
+        const url = $("#gigForm").attr("data-areas-url"); 
+        const localityId = $(this).val();  
+        $.ajax({                       
+            url: url,                  
+            data: {
+                'locality_id': localityId      
+            },
+            success: function (data) {  
+                $("#id_area").html(data);
+            }
+        });
+    });
+
+    $("#id_area").change(function () {
+        const url = $("#gigForm").attr("data-subareas-url"); 
+        const areaId = $(this).val();  
+        console.log(areaId)       
+        $.ajax({                       
+            url: url,                  
+            data: {
+                'area_id': areaId      
+            },
+            success: function (data) {  
+                $("#id_subarea").html(data);
             }
         });
     });
