@@ -90,14 +90,13 @@ def gig_detail(request, id):
         gig = Gig.objects.get(id=id)
     except Gig.DoesNotExist:
         return redirect('/')
-    
+
     #'''set the 1st not null locations elements. Example: if the subarea have no location, take the area location. And so on ...'''
     gig_geoloc = None
-    locations = [gig.subarea.ggeoloc_url, gig.area.ggeoloc_url, gig.locality.ggeoloc_url, gig.city.ggeoloc_url] 
+    locations = [gig.subarea, gig.area, gig.locality, gig.city] 
     for loc_elt in locations:
-        if loc_elt is not None or loc_elt != '':
-            print(loc_elt)
-            gig_geoloc = loc_elt
+        if loc_elt is not None :
+            gig_geoloc = loc_elt.ggeoloc_url
             break
 
     geoloc_display = '''<iframe src="{}" width="610" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>'''.format(gig_geoloc)

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Gig, City, Country, Area
+from .models import *
 from django import forms
 import django.forms.utils
 import django.forms.widgets
@@ -18,9 +18,11 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
-
 class GigForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':8}))
+    locality = forms.ModelChoiceField(queryset=Locality.objects.all(), required=False)
+    area = forms.ModelChoiceField(queryset=Area.objects.all(), required=False)
+    subarea = forms.ModelChoiceField(queryset=SubArea.objects.all(), required=False)
     address = forms.CharField(required=False)
 
     class Meta:
