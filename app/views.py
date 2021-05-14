@@ -196,7 +196,7 @@ def gig_search(request):
     #     elif location or title :
     #         gigs = Gig.objects.filter(Q(title__contains=title) | Q(city=location))
 
-    gig_filter = GigFilter(request.GET, queryset=gigs)
+    gig_filter = GigFilter(request=request)
     gigs = gig_filter.qs
 
     context = {"gigs": gigs, 'countries': countries, 'cities': cities, 'areas': areas, 'categories': categories,

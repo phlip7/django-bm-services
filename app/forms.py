@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -6,20 +7,26 @@ from django import forms
 import django.forms.utils
 import django.forms.widgets
 
+
 class CreateUserForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'mogo-002', 'autocomplete':'off', 'required':'required'}))
-    birthyear = forms.IntegerField(widget=forms.NumberInput(attrs={'minlength':4, 'maxlength':4, 'required':'required'}))
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'mogo-002', 'autocomplete': 'off', 'required': 'required'}),
+        validators=[RegexValidator(regex='^(\w+\d+|\d+\w+)+$', message="Can't use special characters")])
+    birthyear = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'minlength': 4, 'maxlength': 4, 'required': 'required'}))
     phone = forms.CharField(widget=forms.TextInput())
     country = forms.ModelChoiceField(queryset=Country.objects.all(), initial=0, required=True)
     city = forms.ModelChoiceField(queryset=City.objects.all(), initial=0, required=True)
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'name@address.com', 'autocomplete':'off', 'required':'required'}))
-    
+    email = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'name@address.com', 'autocomplete': 'off', 'required': 'required'}))
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
+
 class GigForm(forms.ModelForm):
-    description = forms.CharField(widget=forms.Textarea(attrs={ 'rows':8}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 8}))
     locality = forms.ModelChoiceField(queryset=Locality.objects.all(), required=False)
     area = forms.ModelChoiceField(queryset=Area.objects.all(), required=False)
     subarea = forms.ModelChoiceField(queryset=SubArea.objects.all(), required=False)
@@ -27,8 +34,9 @@ class GigForm(forms.ModelForm):
 
     class Meta:
         model = Gig
-        #fields = '__all__'
-        fields = ['title', 'category', 'description', 'price', 'photo', 'status', 'country', 'city', 'locality', 'area', 'subarea', 'address']
+        # fields = '__all__'
+        fields = ['title', 'category', 'description', 'price', 'photo', 'status', 'country', 'city', 'locality', 'area',
+                  'subarea', 'address']
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -36,31 +44,30 @@ class GigForm(forms.ModelForm):
             self.fields['area'].queryset = Area.objects.none()
 
             if 'country' in self.data:
-            	try:
-                	country_id = int(self.data.get('country'))
-                	self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
-            	except (ValueError, TypeError):
-                	pass  # invalid input from the client; ignore and fallback to empty City queryset
+                try:
+                    country_id = int(self.data.get('country'))
+                    self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
+                except (ValueError, TypeError):
+                    pass  # invalid input from the client; ignore and fallback to empty City queryset
             elif self.instance.pk:
-            	self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
+                self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
 
             if 'city' in self.data:
-            	try:
-                	city_id = int(self.data.get('city'))
-                	self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
-            	except (ValueError, TypeError):
-                	pass  # invalid input from the client; ignore and fallback to empty City queryset
+                try:
+                    city_id = int(self.data.get('city'))
+                    self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
+                except (ValueError, TypeError):
+                    pass  # invalid input from the client; ignore and fallback to empty City queryset
             elif self.instance.pk:
-            	self.fields['area'].queryset = self.instance.city.area_set.order_by('name')
+                self.fields['area'].queryset = self.instance.city.area_set.order_by('name')
 
+            # super(GigForm, self).__init__(*args, **kwargs)
 
-			#super(GigForm, self).__init__(*args, **kwargs)
-            
             # for field in  self.fields:
             #     self.fields[field].widget.attrs['class'] = 'form-control'
             #     self.fields[field].widget.attrs['name'] = field
             #     self.fields[field].widget.attrs['id'] = field
-				
+
             # self.fields['title'].widget.attrs['id'] = 'title'
             # self.fields['title'].widget.attrs['name'] = 'title'
             # self.fields['title'].widget.attrs['id'] = 'title'
