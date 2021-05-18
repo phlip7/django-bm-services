@@ -1,5 +1,5 @@
 alembic
-apturl==0.5.2
+apturl
 asgiref==3.3.1
 asn1crypto==0.24.0
 awscli==1.18.69
