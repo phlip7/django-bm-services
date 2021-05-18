@@ -1,4 +1,4 @@
-alembic==0.9.3.dev0
+alembic
 apturl==0.5.2
 asgiref==3.3.1
 asn1crypto==0.24.0
