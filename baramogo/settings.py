@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+import dj_database_url
+from django.conf.global_settings import DATABASES
+
+env = environ.Env(DEBUG=(bool, True), SECRET_KEY=(str, ''), DATABASE_URL=(str, ""))
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,12 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e5c^g960x*x)7&iwmij2pans%9vl87w9z*qulkso#zod#xhmw)'
-
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['143.110.214.23']
+ALLOWED_HOSTS = ['localhost', '143.110.214.23']
 
 
 # Application definition
@@ -73,16 +78,18 @@ WSGI_APPLICATION = 'baramogo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'baramogo',
-        'USER': 'dhero',
-        'PASSWORD': '1234567D',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': '',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 
 # Password validation
