@@ -11,7 +11,7 @@ import django.forms.widgets
 class CreateUserForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'mogo-002', 'autocomplete': 'off', 'required': 'required'}),
-        validators=[RegexValidator(regex='^(\w+\d+|\d+\w+)+$', message="Can't use special characters")])
+        validators=[RegexValidator(regex='^[A-Za-z0-9]+$', message="Can't use special characters")])
     birthyear = forms.IntegerField(
         widget=forms.NumberInput(attrs={'minlength': 4, 'maxlength': 4, 'required': 'required'}))
     phone = forms.CharField(widget=forms.TextInput())
