@@ -1,1 +1,11 @@
 /* your styles go here */
+@media only screen and (max-width: 768px) {
+  .card-gig-image {
+       height: 27vw!important;
+   }
+}
+@media only screen and (max-width: 576px) {
+  .card-gig-image {
+       height: 43vw!important;
+   }
+}
