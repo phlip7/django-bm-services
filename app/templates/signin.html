@@ -17,7 +17,7 @@
         <div class="col-md-8 col-lg-6 col-xl-5 d-flex align-items-center">
           <div class="w-100 py-5 px-md-5 px-xl-6 position-relative">
             <div class="mb-5"><img class="img-fluid mb-3" src="{% static 'img/logo-square.svg' %}" alt="..." style="max-width: 4rem;">
-              <h2>Welcome back</h2>
+              <h2>Bon retour</h2>
             </div>
 
             <form class="form-validate" method="POST">
@@ -31,7 +31,7 @@
                   <div class="col">
                     <label class="form-label" for="loginPassword"> Password</label>
                   </div>
-                  <div class="col-auto"><a class="form-text small" href="#">Forgot password?</a></div>
+                  <div class="col-auto"><a class="form-text small" href="#">Mot de passe oublié?</a></div>
                 </div>
                 <input class="form-control" name="password" id="loginPassword" placeholder="Password" type="password" required data-msg="Please enter your password">
               </div>
@@ -42,12 +42,9 @@
                 </div>
               </div>
               <!-- Submit-->
-              <button class="btn btn-lg btn-block btn-primary">Sign in</button>
-              <hr class="my-3 hr-text letter-spacing-2" data-content="OR">
-              <button class="btn btn btn-outline-primary btn-block btn-social mb-3"><i class="fa-2x fa-facebook-f fab btn-social-icon"> </i>Connect <span class="d-none d-sm-inline">with Facebook</span></button>
-              <button class="btn btn btn-outline-muted btn-block btn-social mb-3"><i class="fa-2x fa-google fab btn-social-icon"> </i>Connect <span class="d-none d-sm-inline">with Google</span></button>
-              <hr class="my-4">
-              <p class="text-center"><small class="text-muted text-center">Don't have an account yet? <a href="{% url 'signup' %}">Sign Up                </a></small></p>
+              <button class="btn btn-lg btn-block btn-primary">Connexion</button>
+              <hr class="my-3 hr-text letter-spacing-2" data-content="OU">
+              <p class="text-center"><small class="text-muted text-center">Pas encore de compte ? <a href="{% url 'signup' %}">Inscris toi </a></small></p>
             </form><a class="close-absolute mr-md-5 mr-xl-6 pt-5" href="{% url 'home' %}"> 
               <svg class="svg-icon w-3rem h-3rem">
                 <use xlink:href="#close-1"> </use>
