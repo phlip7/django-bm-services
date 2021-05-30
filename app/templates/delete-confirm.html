@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+
+  <section class="py-5">
+
+
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Suppression</h5>
+          </div>
+          <div class="modal-body">
+            Es-tu sûr de vouloir supprimer ? 
+          </div>
+          <div class="modal-footer">
+            <button type="button"><a class="btn btn-primary" href="{% url 'gig_edit' father_id %}">Non - Annuler</a></button>
+            <form method="POST">
+              {% csrf_token %}
+              <input class="form-control" type="hidden" name="form_id"   id="form_id"   value="gig_img">
+              <input class="form-control" type="hidden" name="item_id"   id="item_id"   value="{{ item_id }}">
+              <input class="form-control" type="hidden" name="father_id" id="father_id" value="{{ father_id }}">
+              <button class="btn btn-danger">Oui</button>
+            </form>
+          </div>
+        </div>
+      </div>
+   
+  </section>
+
+{% endblock %}

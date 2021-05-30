@@ -72,7 +72,7 @@ class Gig(models.Model):
     category = models.ForeignKey(GigCategory, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length=1000)
     price = models.CharField(max_length=500, default=0)
-    photo = models.FileField(upload_to='gigs', default='gigs/baramogo-default-gig-1.jpeg')
+    cover_image = models.FileField(upload_to='gigs', default='gigs/baramogo-default-gig-1.jpeg')
     status = models.BooleanField(default=True, choices=STATUS_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=timezone.now)
@@ -89,6 +89,13 @@ class Gig(models.Model):
 
     def __str__(self):
         return self.title
+
+class GigImage(models.Model):
+    gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='gigs', null=True, blank=True)
+
+    def __str__(self):
+        return self.gig.title
 
 class Review(models.Model):
     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)

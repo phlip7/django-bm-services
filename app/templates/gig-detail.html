@@ -3,7 +3,7 @@
 
 {% block page %}
     <!-- Hero Section    restaurant-1515164783716-8e6920f3e77c.jpg   img/photo/baramogo-default-gig-1.jpeg --> 
-    <section class="pt-7 pb-5 d-flex align-items-end dark-overlay bg-cover" style="background-image: url(/media/{{ gig.photo }});">
+    <section class="pt-7 pb-5 d-flex align-items-end dark-overlay bg-cover" style="background-image: url(/media/{{ gig.cover_image }});">
       <div class="container overlay-content">
         <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row align-items-lg-end">
           <div class="text-white mb-4 mb-lg-0">
@@ -53,7 +53,7 @@
             </div>
             <div class="text-block">
               <!-- About the hoster-->
-              <div class="media"><img class="avatar avatar-lg mr-4" src="{% static 'img/avatar/avatar-10.jpg' %}" alt="Jack London">
+              <div class="media"><img class="avatar avatar-lg mr-4" src="/media/{{ gig.user.profile.avatar }}" alt="Jack London">
                 <div class="media-body">
                   <p> <span class="text-muted text-uppercase text-sm">Service créé par </span><br><strong> {{ gig.user.first_name }} {{ gig.user.last_name }} </strong></p>
                   <p class="text-muted text-sm mb-2"> {{ gig.user.profile.about }} </p>
@@ -65,9 +65,20 @@
 
             <div class="text-block">
               <!-- Gallery-->
-              <h3 class="mb-4">Gallerie</h3>
+              <h3 class="mb-4">Galerie</h3>
               <div class="row gallery ml-n1 mr-n1">
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}" alt="..."></a></div>
+                {% for gig_image in gig_images %}
+                  <div class="col-lg-4 col-6 px-1 mb-2">
+                    <a href="/media/{{ gig_image.image }}"><img class="img-fluid" src="/media/{{ gig_image.image }}" alt="..."></a>
+                  </div>
+                {% endfor %}
+                
+                <div class="col-lg-4 col-6 px-1 mb-2">
+                  <a href="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}">
+                    <img class="img-fluid" src="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}" alt="...">
+                    <a class="remove-image" href="#" style="display: inline;">&#215;</a>
+                  </a>
+                </div>
                 <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}" alt="..."></a></div>
                 <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}" alt="..."></a></div>
                 <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}" alt="..."></a></div>
@@ -118,7 +129,7 @@
 
               {% for review in reviews %}
                 <div class="media d-block d-sm-flex review">
-                  <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="{% static 'img/avatar/avatar-2.jpg' %}" alt="Luke Skywalker"><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
+                  <div class="text-md-center mr-4 mr-xl-5"><img class="d-block avatar avatar-xl p-2 mb-2" src="/media/{{ review.user.profile.avatar }}" alt=""><span class="text-uppercase text-muted text-sm">Dec 2018</span></div>
                   <div class="media-body">
                     <h6 class="mt-2 mb-1"> {{ review.user.first_name }} {{ review.user.last_name }} </h6>
                     <div class="mb-2">

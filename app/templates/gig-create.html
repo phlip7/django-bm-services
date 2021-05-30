@@ -52,13 +52,30 @@
               <label class="form-label" for="form_name">Prix - CFA -</label>
               {{ form.price }}
             </div>
-            <div class="form-group">
-              <label class="form-label" for="form_name">Photo</label>
-              {{ form.photo }}
-              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
-            </div>
           </div>
         </div>
+
+        <div class="row form-block">
+          <div class="col-lg-4">
+            <h4>Photos</h4>
+            <p class="text-muted text-sm">Ajoutes une photo de couverture et quelques photos de ton service</p>
+          </div>
+          <div class="col-lg-7 ml-auto">
+            <div class="form-group"></div>
+             <!-- Photo de couverture -->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Photo de couverture</label>
+              {{ form.cover_image }}
+              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
+            </div>
+             <!-- Photo de service -->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Photo.s de service</label>
+              <input type="file" multiple accept="image/*" class="form-control" name="images" id="id_images">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">importes quelques photos de ton service </small>
+            </div>
+          </div>
+        </div>   
         <div class="row form-block">
           <div class="col-lg-4">
             <h4>Localisation</h4>

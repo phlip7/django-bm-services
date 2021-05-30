@@ -70,8 +70,8 @@
             {% for gig in gigs %}
             <div class="col-sm-6 col-xl-4 mb-5 hover-animate" data-marker-id="{{ gig.id }}">
               <div class="card h-100 border-0 shadow">
-                <div class="card-img-top overflow-hidden gradient-overlay"> 
-                <img class="img-fluid" src="{% static 'img/photo/photo-1488805990569-3c9e1d76d51c.jpg' %}" alt="Brooklyn Life, Easy to Manhattan"/>
+                <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;"> 
+                <img width="100%" height="100%" src="/media/{{ gig.cover_image }}" alt="{{ gig.cover_image }}"/>
                   <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
                   <div class="card-img-overlay-bottom z-index-20">
                     <div class="media text-white text-sm align-items-center"><img class="avatar avatar-border-white mr-2" src="{% static 'img/avatar/avatar-11.jpg' %}" alt="{{ gig.title }}"/>

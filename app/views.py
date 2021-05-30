@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-
+#from PIL import Image
 from .filters import GigFilter
 from .forms import CreateUserForm, GigForm
 from django.db.models import Q
@@ -89,6 +89,23 @@ def auth(request, username, password):
         messages.info(request, 'email OU mot de passe incorrect')
         return redirect('signin')
 
+# def resize_image(imagename, ref_size):
+#     # ''' resize if image is greater than the reference size '''
+#     print('fefdfs')
+#     print(imagename)
+#     print(ref_size)
+#     img = Image.open(imagename)
+#     (width, height) = img.size
+#     img = img.resize(ref_size)
+#     img.save(imagename)
+#     #if width > ref_size[0] or height > ref_size[1]:
+#     #    img = img.resize(ref_size)
+#     #    img.save(imagename)
+#     #print('size : {}'.format(img.size))
+#     #print('L : {} '.format(img.size[0]))
+#     print(imagename)
+#     return imagename
+
 
 def disconnect(request):
     logout(request)
@@ -129,7 +146,8 @@ def gig_detail(request, id):
         return redirect('gig_detail', id=gig.id)
 
     reviews = Review.objects.filter(gig=gig)
-    return render(request, 'gig-detail.html', {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews})
+    gig_images = GigImage.objects.filter(gig=gig)
+    return render(request, 'gig-detail.html', {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews, "gig_images": gig_images})
 
 
 @login_required(login_url="signin")
@@ -137,10 +155,15 @@ def gig_create(request):
     error = ''
     if request.method == 'POST':
         gig_form = GigForm(request.POST, request.FILES)
+        images = request.FILES.getlist('images')
         if gig_form.is_valid():
             gig = gig_form.save(commit=False)
             gig.user = request.user
             gig.save()
+            if images is not None:
+                for image in images:
+                    img = GigImage.objects.create(gig = gig, image = image)
+
             return redirect('gig_mygigs')
         else:
             error = "Données non valides"
@@ -160,17 +183,17 @@ def gig_edit(request, id):
         error = ''
         if request.method == 'POST':
             gig_form = GigForm(request.POST, request.FILES, instance=gig)
-            print(gig_form)
             if gig_form.is_valid():
                 gig.save()
                 return redirect('gig_mygigs')
             else:
                 print(messages.error)
                 error = "Data is not valid"
+        gig_images = GigImage.objects.filter(gig=gig)
         gig_form = GigForm()
         return render(request, 'gig-edit.html',
                       {"gig": gig, "error": error, 'countries': countries, 'cities': cities, 'areas': areas,
-                       'categories': categories})
+                       'categories': categories, "gig_images": gig_images})
     except Gig.DoesNotExist:
         return redirect('/')
 
@@ -267,6 +290,17 @@ def personal_info(request, username):
 
     return render(request, 'personal-info.html', {"profile": profile, "countries": countries, "cities": cities})
 
+@login_required(login_url="/")
+def delete_confirm(request, id, father_id):
+    # ''' id : id the item to delete. father_id : id of the entity (gig, ...) calling the deletion '''
+    if request.method == 'POST':
+        form_id = request.POST.get('form_id')
+        if form_id == 'gig_img':
+            GigImage.objects.filter(id=request.POST['item_id']).delete()
+            return redirect('gig_edit', father_id)
+
+    context = {"item_id": id, 'father_id': father_id}
+    return render(request, 'delete-confirm.html', context)
 
 # AJAX
 def load_cities(request):

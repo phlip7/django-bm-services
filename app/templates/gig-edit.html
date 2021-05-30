@@ -60,15 +60,50 @@
               <label class="form-label" for="form_name">Prix - CFA -</label>
               <input type="number" class="form-control" name="price" id="id_price" value="{{ gig.price }}">
             </div>
-             <!-- Photo-->
+          </div>
+        </div>
+        <div class="row form-block">
+          <div class="col-lg-4">
+            <h4>Photos</h4>
+            <p class="text-muted text-sm">Ajoutes une photo de couverture et quelques photos de ton service</p>
+          </div>
+          <div class="col-lg-7 ml-auto">
+            <div class="form-group"></div>
+             <!-- Photo de couverture -->
             <div class="form-group">
-              <label class="form-label" for="form_name">Photo</label>
-              <small>Photo actuelle : {{ gig.photo }}</small>
-              <input type="file" class="form-control" name="photo" id="id_photo">
-              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
+              <label class="form-label" for="form_name">Photo de couverture</label>
+              <small>Photo actuelle : {{ gig.cover_image }}</small>
+              <input type="file" class="form-control" name="cover_image" id="id_photo">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image principale qui illustre ton service </small>
+            </div>
+             <!-- Photo de service -->
+            <div class="form-group">
+              <label class="form-label" for="form_name">Photo.s de service</label>
+              <div class="text-block">
+                <!-- Gallery-->
+                <div class="row  ml-n1 mr-n1">
+                  {% for gig_image in gig_images %}
+                    <div class="col-lg-4 col-6 px-1 mb-2">
+                      <a href="/media/{{ gig_image.image }}"><img class="img-fluid" src="/media/{{ gig_image.image }}" alt="..."></a>
+                      <a class="remove-image" href="{% url 'delete_confirm' gig_image.id gig.id %}" style="display: inline;">&#215;</a>
+                    </div>
+                  {% endfor %}
+                  
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}" alt="..."></a></div>
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}" alt="..."></a></div>
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}" alt="..."></a></div>
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}" alt="..."></a></div>
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1508766917616-d22f3f1eea14.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1508766917616-d22f3f1eea14.jpg' %}" alt="..."></a></div>
+                  <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1430931071372-38127bd472b8.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1430931071372-38127bd472b8.jpg' %}" alt="..."></a></div>
+                </div>
+              </div>
+
+              <input type="file" multiple class="form-control" name="images" id="id_images">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">importes quelques photos de ton service </small>
             </div>
           </div>
         </div>
+        
         <div class="row form-block">
           <div class="col-lg-4">
             <h4>Localisation</h4>

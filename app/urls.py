@@ -15,6 +15,7 @@ urlpatterns = [
     re_path(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
     path('account/', views.account, name='account'),
     re_path(r'^personal_info/(?P<username>\w+)/$', views.personal_info, name='personal_info'),
+    re_path(r'^delete_confirm/(?P<id>[0-9]+)/(?P<father_id>[0-9]+)/$', views.delete_confirm, name='delete_confirm'),
 
     path('ajax/load-cities/', views.load_cities, name='ajax_load_cities'), # AJAX
     path('ajax/load-localities/', views.load_localities, name='ajax_load_localities'), # AJAX
