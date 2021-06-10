@@ -156,7 +156,7 @@ def gig_create(request):
     if request.method == 'POST':
         gig_form = GigForm(request.POST, request.FILES)
         images = request.FILES.getlist('images')
-        if images is not None and len(images) > 2:
+        if images is not None and len(images) > 6:
             error = "The max number of images you can upload is 6"
         else:
             if gig_form.is_valid():
