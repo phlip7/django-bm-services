@@ -156,17 +156,20 @@ def gig_create(request):
     if request.method == 'POST':
         gig_form = GigForm(request.POST, request.FILES)
         images = request.FILES.getlist('images')
-        if gig_form.is_valid():
-            gig = gig_form.save(commit=False)
-            gig.user = request.user
-            gig.save()
-            if images is not None:
-                for image in images:
-                    img = GigImage.objects.create(gig = gig, image = image)
-
-            return redirect('gig_mygigs')
+        if images is not None and len(images) > 2:
+            error = "The max number of images you can upload is 6"
         else:
-            error = "Données non valides"
+            if gig_form.is_valid():
+                gig = gig_form.save(commit=False)
+                gig.user = request.user
+                gig.save()
+                if images is not None:
+                    for image in images:
+                        img = GigImage.objects.create(gig = gig, image = image)
+
+                return redirect('gig_mygigs')
+            else:
+                error = "Données non valides"
 
     gig_form = GigForm()
     return render(request, 'gig-create.html', {'error': error, 'form': gig_form})
@@ -210,14 +213,6 @@ def gig_search(request):
     areas = Area.objects.all()
     categories = GigCategory.objects.all()
     gigs = Gig.objects.all()
-
-    # if request.method == 'GET' and request.GET.get('form_id')=='gsearch':
-    #     location = request.GET.get('location')
-    #     title = request.GET.get('title')
-    #     if location and title :
-    #         gigs = Gig.objects.filter(title__contains=title, city=location)
-    #     elif location or title :
-    #         gigs = Gig.objects.filter(Q(title__contains=title) | Q(city=location))
 
     gig_filter = GigFilter(request=request)
     gigs = gig_filter.qs

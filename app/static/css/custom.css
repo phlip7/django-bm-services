@@ -1,15 +1,4 @@
 /* your styles go here */
-@media only screen and (max-width: 768px) {
-  .card-gig-image {
-       height: 27vw!important;
-   }
-}
-@media only screen and (max-width: 576px) {
-  .card-gig-image {
-       height: 43vw!important;
-   }
-}
-
 .remove-image {
   display: none;
   position: absolute;
@@ -38,3 +27,70 @@
     top: -10px;
   right: -11px;
   }
+
+.gig-image {
+    width: 100%;
+}
+
+
+@media screen and (min-width: 1200px) {
+    .gig-image {
+        height: 160px!important;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .gig-image {
+        height: 132px!important;
+    }
+}
+@media screen and (max-width: 992px) {
+    .gig-image {
+        height: 227px!important;
+    }
+}
+@media only screen and (max-width: 767px) {
+  .card-gig-image {
+       height: 27vw!important;
+   }
+   .gig-image {
+        height: 167px!important;
+    }
+}
+@media only screen and (max-width: 576px) {
+  .card-gig-image {
+       height: 43vw!important;
+   }
+   .gig-image {
+        height: 178px!important;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .gig-image {
+        height: 166px!important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .gig-image {
+        height: 150px!important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gig-image {
+        height: 135px!important;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .gig-image {
+        height: 126px!important;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .gig-image {
+        height: 110px!important;
+    }
+}
