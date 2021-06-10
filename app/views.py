@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-#from PIL import Image
+# from PIL import Image
 from .filters import GigFilter
 from .forms import CreateUserForm, GigForm
 from django.db.models import Q
@@ -89,6 +89,7 @@ def auth(request, username, password):
         messages.info(request, 'email OU mot de passe incorrect')
         return redirect('signin')
 
+
 # def resize_image(imagename, ref_size):
 #     # ''' resize if image is greater than the reference size '''
 #     print('fefdfs')
@@ -147,7 +148,8 @@ def gig_detail(request, id):
 
     reviews = Review.objects.filter(gig=gig)
     gig_images = GigImage.objects.filter(gig=gig)
-    return render(request, 'gig-detail.html', {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews, "gig_images": gig_images})
+    return render(request, 'gig-detail.html',
+                  {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews, "gig_images": gig_images})
 
 
 @login_required(login_url="signin")
@@ -157,7 +159,9 @@ def gig_create(request):
         gig_form = GigForm(request.POST, request.FILES)
         images = request.FILES.getlist('images')
         if images is not None and len(images) > 6:
-            error = "The max number of images you can upload is 6"
+            error = "Nombre maximum de photos atteint!!" \
+                    " Supprimes quelques photos existantes" \
+                    " avant d’importer des photos nouvelles."
         else:
             if gig_form.is_valid():
                 gig = gig_form.save(commit=False)
@@ -165,7 +169,7 @@ def gig_create(request):
                 gig.save()
                 if images is not None:
                     for image in images:
-                        img = GigImage.objects.create(gig = gig, image = image)
+                        img = GigImage.objects.create(gig=gig, image=image)
 
                 return redirect('gig_mygigs')
             else:
@@ -184,15 +188,24 @@ def gig_edit(request, id):
         areas = Area.objects.all()
         categories = GigCategory.objects.all()
         error = ''
-        if request.method == 'POST':
-            gig_form = GigForm(request.POST, request.FILES, instance=gig)
-            if gig_form.is_valid():
-                gig.save()
-                return redirect('gig_mygigs')
-            else:
-                print(messages.error)
-                error = "Data is not valid"
         gig_images = GigImage.objects.filter(gig=gig)
+        if request.method == 'POST':
+            images = request.FILES.getlist('images')
+            gig_form = GigForm(request.POST, request.FILES, instance=gig)
+            if len(gig_images) + len(images) > 6:
+                error = "Nombre maximum de photos atteint!!" \
+                        " Supprimes quelques photos existantes" \
+                        " avant d’importer des photos nouvelles."
+            else:
+                if gig_form.is_valid():
+                    gig.save()
+                    if images is not None:
+                        for image in images:
+                            GigImage.objects.create(gig=gig, image=image)
+                    return redirect('gig_mygigs')
+                else:
+                    print(messages.error)
+                    error = "Data is not valid"
         gig_form = GigForm()
         return render(request, 'gig-edit.html',
                       {"gig": gig, "error": error, 'countries': countries, 'cities': cities, 'areas': areas,
@@ -285,6 +298,7 @@ def personal_info(request, username):
 
     return render(request, 'personal-info.html', {"profile": profile, "countries": countries, "cities": cities})
 
+
 @login_required(login_url="/")
 def delete_confirm(request, id, father_id):
     # ''' id : id the item to delete. father_id : id of the entity (gig, ...) calling the deletion '''
@@ -296,6 +310,7 @@ def delete_confirm(request, id, father_id):
 
     context = {"item_id": id, 'father_id': father_id}
     return render(request, 'delete-confirm.html', context)
+
 
 # AJAX
 def load_cities(request):
