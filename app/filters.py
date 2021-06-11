@@ -12,18 +12,24 @@ class GigFilter(django_filters.FilterSet):
     def qs(self):
         parent = super().qs
         if self.request.GET.get('form_id') is not None:
+            form_id = self.request.GET.get('form_id')
             category = self.request.GET.get('category')
             country = self.request.GET.get('country')
             city = self.request.GET.get('city')
             area = self.request.GET.get('area')
-            if category is not "":
-                parent = parent.filter(category=category)
-            if country is not "":
-                parent = parent.filter(country=country)
-            if city is not "":
-                parent = parent.filter(city=city)
-            if area is not "":
-                parent = parent.filter(area=area)
+            print("GiG city =====",city, area)
+            if form_id == "filter":
+                if category is not "":
+                    parent = parent.filter(category=category)
+                if country is not "":
+                    parent = parent.filter(country=country)
+                if city is not "":
+                    parent = parent.filter(city=city)
+                if area is not "":
+                    parent = parent.filter(area=area)
+            else:
+                if city is not "":
+                    parent = parent.filter(city=city)
 
         title = self.request.GET.get("title")
         title = None if title == "" else title
