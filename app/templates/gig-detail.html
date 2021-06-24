@@ -15,7 +15,7 @@
               <i class="fa fa-xs fa-star text-primary"></i>
               <i class="fa fa-xs fa-star text-primary"></i>
               <i class="fa fa-xs fa-star text-primary"></i>
-              <i class="fa fa-xs fa-star text-gray-200 mr-4"></i>8 Reviews</p>
+              <i class="fa fa-xs fa-star text-gray-200 mr-4"></i> {{ reviews|length }}  Commentaires</p>
           </div>
           <div class="calltoactions"><a class="btn btn-primary" href="#leaveReview" onclick="$('#leaveReview').collapse('show')" data-smooth-scroll>Laisser un commentaire</a></div>
           {% if user == gig.user %}
@@ -28,6 +28,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
+          
             <!-- About Listing-->
             <div class="text-block">
               <h3 class="mb-3">Description</h3>
@@ -35,6 +36,7 @@
               <p class="subtitle text-sm text-primary">TARIF : cfa  {{ gig.price }}</p>
             </div>
             <div class="text-block">
+
               <!-- Listing Location-->
               <h3 class="mb-4">Localisation</h3>
               <div class="map-wrapper-300 mb-3">
@@ -51,14 +53,25 @@
                 </div>
               </div>
             </div>
+
             <div class="text-block">
               <!-- About the hoster-->
-              <div class="media"><img class="avatar avatar-lg mr-4" src="/media/{{ gig.user.profile.avatar }}" alt="Jack London">
+              <div class="media"><img class="avatar avatar-lg mr-4" src="/media/{{ gig.user.profile.avatar }}" alt="">
                 <div class="media-body">
-                  <p> <span class="text-muted text-uppercase text-sm">Service créé par </span><br><strong> {{ gig.user.first_name }} {{ gig.user.last_name }} </strong></p>
-                  <p class="text-muted text-sm mb-2"> {{ gig.user.profile.about }} </p>
-                  <p class="text-muted text-sm"> Mon SLOGAN : {{ gig.user.profile.slogan }} </p>
+                  <p> <span class="h3">Service créé par </span>
+                    </br><span class="subtitle text-sm text-primary"> {{ gig.user.first_name }} {{ gig.user.last_name }} </span>
+                  </p>
+                  <p class="text-muted text-sm mb-2"> {% if gig.user.profile.about %} {{ gig.user.profile.about }} {% else %} <em>profil non renseigné</em> {% endif %} </p>
+                  <p class="text-muted text-sm"> Mon SLOGAN : {% if gig.user.profile.slogan %} {{ gig.user.profile.slogan }} {% else %} <em> non renseigné</em> {% endif %}  </p>
                   <p class="text-sm"><a href="{% url 'profile' gig.user.username %}">Voir les autres services de {{ gig.user.first_name }} <i class="fa fa-long-arrow-alt-right ml-2"></i></a></p>
+                
+                  <p class="mb-2"> <a class="" href="#"> <i class="fa fa-phone mr-3"></i><span class="text-dark"> {{ gig.user.profile.phone }} </span></a></p>
+                  <p class="mb-2"> <a class="" href="#"> <i class="fa fa-envelope mr-3"></i><span class="text-dark"> {{ gig.user.email }}  </span></a></p>
+                  <p class="mb-2"> <a class="" href="#"> <i class="fa fa-globe mr-3"></i><span class="text-dark"> {% if gig.website_link %}  {{ gig.website_link }} {% else %} -- {% endif %} </span></a></p>
+                  <p class="mb-2"> <a class="" href="#"> <i class="fab fa-facebook mr-3"></i><span class="text-dark"> {% if gig.facebook_link %} {{ gig.facebook_link }} {% else %} -- {% endif %}  </span></a></p>
+                  <p class="mb-2"> <a class="" href="#"> <i class="fab fa-twitter mr-3"></i><span class="text-dark"> {% if gig.twitter_link %}  {{ gig.twitter_link }} {% else %} -- {% endif %} </span></a></p>
+                  <p class="mb-2"> <a class="" href="#"> <i class="fab fa-instagram mr-3"></i><span class="text-dark"> {% if gig.instagram_link %}  {{ gig.instagram_link }} {% else %} -- {% endif %}  </span></a></p>
+                
                 </div>
               </div>
             </div>
@@ -75,38 +88,12 @@
                   </div>
                 {% endfor %}
                 
-                <div class="col-lg-4 col-6 px-1 mb-2">
-                  <a href="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}">
-                    <img class="img-fluid" src="{% static 'img/photo/restaurant-1515164783716-8e6920f3e77c.jpg' %}" alt="...">
-                    <a class="remove-image" href="#" style="display: inline;">&#215;</a>
-                  </a>
-                </div>
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1466978913421-dad2ebd01d17.jpg' %}" alt="..."></a></div>
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1477763858572-cda7deaa9bc5.jpg' %}" alt="..."></a></div>
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1505275350441-83dcda8eeef5.jpg' %}" alt="..."></a></div>
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1508766917616-d22f3f1eea14.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1508766917616-d22f3f1eea14.jpg' %}" alt="..."></a></div>
-                <div class="col-lg-4 col-6 px-1 mb-2"><a href="{% static 'img/photo/restaurant-1430931071372-38127bd472b8.jpg' %}"><img class="img-fluid" src="{% static 'img/photo/restaurant-1430931071372-38127bd472b8.jpg' %}" alt="..."></a></div>
               </div>
             </div>
             <!-- Amenities-->
-            <div class="text-block">
+            {% comment %} <div class="text-block">
               <h3 class="mb-4">Amenities</h3>
               <ul class="amenities-list list-inline">
-                <li class="list-inline-item mb-3">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle bg-secondary mr-2"><i class="fa fa-check"></i></div><span>Elevator</span>
-                  </div>
-                </li>
-                <li class="list-inline-item mb-3">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle bg-secondary mr-2"><i class="fa fa-check"></i></div><span>Vegan friendly</span>
-                  </div>
-                </li>
-                <li class="list-inline-item mb-3">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle bg-secondary mr-2"><i class="fa fa-check"></i></div><span>Alcohol served</span>
-                  </div>
-                </li>
                 <li class="list-inline-item mb-3">
                   <div class="d-flex align-items-center">
                     <div class="icon-circle bg-secondary mr-2"><i class="fa fa-check"></i></div><span>No smoking</span>
@@ -124,7 +111,7 @@
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> {% endcomment %}
             <div class="text-block">
               <p class="subtitle text-sm text-primary">Commentaires    </p>
               <h5 class="mb-4">Liste des Commentaires </h5>
@@ -197,11 +184,11 @@
             <div class="pl-xl-4">
 
               <!-- Contact-->
-              <div class="card border-0 shadow mb-5">
+              {% comment %} <div class="card border-0 shadow mb-5">
                 <div class="card-header bg-gray-100 py-4 border-0">
                   <div class="media align-items-center">
                     <div class="media-body">
-                      <p class="subtitle text-sm text-primary">Drop Us a Line</p>
+                      <p class="subtitle text-sm text-primary">Je suis joignable ici</p>
                       <h4 class="mb-0">Contact</h4>
                     </div>
                     <svg class="svg-icon svg-icon svg-icon-light w-3rem h-3rem ml-3 text-muted">
@@ -214,21 +201,21 @@
                     <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none" href="#"><i class="fa fa-user mr-3"></i><span class="text-muted"> {{ gig.user.first_name }} {{ gig.user.last_name }} </span></a></li>
                     <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none" href="#"><i class="fa fa-phone mr-3"></i><span class="text-muted"> {{ gig.user.profile.phone }} </span></a></li>
                     <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fa fa-envelope mr-3"></i><span class="text-muted"> {{ gig.user.email }}  </span></a></li>
-                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fa fa-globe mr-3"></i><span class="text-muted"> {{ gig.website_link }}  </span></a></li>
-                    <li class="mb-2"> <a class="text-blue text-sm text-decoration-none" href="#"><i class="fab fa-facebook mr-3"></i><span class="text-muted"> {{ gig.facebook_link }}  </span></a></li>
-                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fab fa-twitter mr-3"></i><span class="text-muted"> {{ gig.twitter_link }} </span></a></li>
-                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fab fa-instagram mr-3"></i><span class="text-muted"> {{ gig.instagram_link }}  </span></a></li>
+                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fa fa-globe mr-3"></i><span class="text-muted"> {% if gig.website_link %}  {{ gig.website_link }} {% else %} -- {% endif %} </span></a></li>
+                    <li class="mb-2"> <a class="text-blue text-sm text-decoration-none" href="#"><i class="fab fa-facebook mr-3"></i><span class="text-muted"> {% if gig.facebook_link %} {{ gig.facebook_link }} {% else %} -- {% endif %}  </span></a></li>
+                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fab fa-twitter mr-3"></i><span class="text-muted"> {% if gig.twitter_link %}  {{ gig.twitter_link }} {% else %} -- {% endif %} </span></a></li>
+                    <li class="mb-2"> <a class=" text-sm text-decoration-none" href="#"><i class="fab fa-instagram mr-3"></i><span class="text-muted"> {% if gig.instagram_link %}  {{ gig.instagram_link }} {% else %} -- {% endif %}  </span></a></li>
                   </ul>
                   <div class="text-center"><a class="btn btn-outline-primary btn-block" href="#"> <i class="far fa-paper-plane mr-2"></i>Send a Message</a></div>
                 </div>
-              </div>
+              </div> {% endcomment %}
               <!-- Opening Hours      -->
               <div class="card border-0 shadow mb-5">
                 <div class="card-header bg-gray-100 py-4 border-0">
                   <div class="media align-items-center">
                     <div class="media-body">
-                      <p class="subtitle text-sm text-primary">Opening in 5 minutes</p>
-                      <h4 class="mb-0">Opening Hours </h4>
+                      <p class="subtitle text-sm text-primary">Disponibilité</p>
+                      <h4 class="mb-0">Horaire </h4>
                     </div>
                     <svg class="svg-icon svg-icon svg-icon-light w-3rem h-3rem ml-3 text-muted">
                       <use xlink:href="#wall-clock-1"> </use>
@@ -269,9 +256,9 @@
                 </div>
               </div>
 
-              <div class="text-center">
+              {% comment %} <div class="text-center">
                 <p><a class="text-secondary" href="#"> <i class="fa fa-heart"></i> Bookmark This Listing</a></p><span>79 people bookmarked this place </span>
-              </div>
+              </div> {% endcomment %}
             </div>
           </div>
         </div>

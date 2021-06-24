@@ -8,7 +8,7 @@
           <div class="col-lg-3 mr-lg-auto">
             <div class="card border-0 shadow mb-6 mb-lg-0">
               <div class="card-header bg-gray-100 py-4 border-0 text-center">
-                <a class="d-inline-block" href="#"><img class="d-block avatar avatar-xxl p-2 mb-2" src="{% static 'img/avatar/avatar-7.jpg' %}" alt=""></a>
+                <a class="d-inline-block" href="#"><img class="d-block avatar avatar-xxl p-2 mb-2" src="/media/{{ profile.avatar }}" alt=""></a> 
                 <h5>{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
                 <p class="text-muted text-sm mb-0">{{ profile.city }}, {{ profile.country }}  </p>
               </div>
@@ -20,26 +20,11 @@
                     </svg>
                   </div>
                   <div class="media-body">
-                    <p class="mb-0">2877 reviews</p>
-                  </div>
-                </div>
-                <div class="media align-items-center mb-3">
-                  <div class="icon-rounded icon-rounded-sm bg-primary-light mr-2">
-                    <svg class="svg-icon text-primary svg-icon-md">
-                      <use xlink:href="#checkmark-1"> </use>
-                    </svg>
-                  </div>
-                  <div class="media-body">
-                    <p class="mb-0">Verified</p>
+                    <p class="mb-0">{{ gigs|length}} services</p>
                   </div>
                 </div>
                 <hr>
-                <h6>{{ profile.user.first_name }} a fourni</h6>
-                <ul class="card-text text-muted">
-                  {% if profile.phone %} <li> Numero Telephone </li> {% endif %}
-                  {% if profile.user.email %} <li> Email </li> {% endif %}
-                </ul>
-                <small class="form-text text-muted" id="propertyTypeHelp">details disponibles dans les services </small>
+                <small class="form-text text-muted" id="propertyTypeHelp">Contacts disponibles dans les services </small>
               </div>
             </div>
           </div>
