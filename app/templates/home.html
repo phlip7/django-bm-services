@@ -113,9 +113,8 @@
               <!-- place item-->
               <div class="w-100 h-100 hover-animate" data-marker-id="{{ gig.id }}">
                 <div class="card h-100 border-0 shadow">
-                  <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;"> <!-- <div class="card-img-top overflow-hidden gradient-overlay"> -->
+                  <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">
                     <img width="100%" height="100%" src="/media/{{ gig.cover_image }}" alt="{{ gig.title }}"/>
-<!--                     <img class="img-fluid" src="{% static 'img/photo/photo-1484154218962-a197022b5858.jpg' %}" alt="{{ gig.title }}"/>-->
                     <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
                     <div class="card-img-overlay-bottom z-index-20">
                       <div class="media text-white text-sm align-items-center">
@@ -156,7 +155,7 @@
     <section class="py-7 position-relative dark-overlay"><img class="bg-image" src="{% static 'img/photo/photo-1497436072909-60f360e1d4b1.jpg' %}" alt="">
       <div class="container">
         <div class="overlay-content text-white py-lg-5">
-          <h3 class="display-3 font-weight-bold text-serif text-shadow mb-5">Envie de proposer tes services?</h3><a class="btn btn-light" href="signup.html">Inscris toi</a>
+          <h3 class="display-3 font-weight-bold text-serif text-shadow mb-5">Envie de proposer tes services?</h3><a class="btn btn-light" href="{% url 'signup' %}">Inscris toi</a>
         </div>
       </div>
     </section>

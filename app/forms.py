@@ -31,13 +31,13 @@ class GigForm(forms.ModelForm):
     area = forms.ModelChoiceField(queryset=Area.objects.all(), required=False)
     subarea = forms.ModelChoiceField(queryset=SubArea.objects.all(), required=False)
     address = forms.CharField(required=False)
-    cover_image = forms.ImageField(widget = forms.ClearableFileInput (),)
+    cover_image = forms.ImageField(widget = forms.ClearableFileInput(),)
 
     class Meta:
         model = Gig
         # fields = '__all__'
-        fields = ['title', 'category', 'description', 'price', 'cover_image', 'status', 'country', 'city', 'locality', 'area',
-                  'subarea', 'address']
+        fields = ['title', 'category', 'description', 'price', 'cover_image', 'status', 
+            'country', 'city', 'locality', 'area', 'subarea', 'address']
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

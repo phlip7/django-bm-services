@@ -46,7 +46,7 @@
             <div class="form-group">
               <label class="form-label" for="form_name">Description</label>
               {{ form.description }}
-              <small class="form-text text-muted mt-2" id="descriptionHelp">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he thought. It wasn't a dream.    </small>
+              <small class="form-text text-muted mt-2" id="descriptionHelp"> Décris ton service.    </small>
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Prix - CFA -</label>
@@ -79,7 +79,7 @@
         <div class="row form-block">
           <div class="col-lg-4">
             <h4>Localisation</h4>
-            <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où sera fourni ton service ? .</p>
+            <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où sera fourni ton service ? </p>
           </div>
           <div class="col-lg-7 ml-auto">
             <!-- Country-->
@@ -124,6 +124,35 @@
             </div>
           </div>
         </div>
+
+        {% comment %} <div class="row form-block">
+          <div class="col-lg-4">
+            <h4>Heures d'ouverture</h4>
+            <p class="text-muted text-sm">Quelles tes heures d'ouverture et de fermeture ?</p>
+          </div>
+          <div class="col-lg-7 ml-auto">
+            <table class="table text-sm mb-0">
+              {% for day in days %}
+              <tr>
+                <th class="pl-0 border-0">{{ day.name }}</th>
+                <td class="pr-0 text-right border-0"> 
+                  <div class="row">
+                    <div class="col-md-1"> De </div>
+                    <div class="col-md-5">
+                      {{ form.mon_open }}
+                    </div>
+                    <div class="col-md-1"> à </div>
+                    <div class="col-md-5">
+                      {{ form.mon_close }}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div> {% endcomment %}
+
         <div class="row form-block">
             <div class="col-md-6">
               <div class="form-group">

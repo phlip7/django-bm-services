@@ -148,8 +148,9 @@ def gig_detail(request, id):
 
     reviews = Review.objects.filter(gig=gig)
     gig_images = GigImage.objects.filter(gig=gig)
+    gig_similars = Gig.objects.filter(category=gig.category)
     return render(request, 'gig-detail.html',
-                  {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews, "gig_images": gig_images})
+                  {"gig":gig, "geoloc_display":geoloc_display, "reviews":reviews, "gig_images":gig_images, "gig_similars":gig_similars})
 
 
 @login_required(login_url="signin")

@@ -3,14 +3,14 @@
 
 {% block page %}
     <!-- Hero Section-->
-    <section class="hero py-6 py-lg-7 text-white dark-overlay"><img class="bg-image" src="{% static 'img/photo/photo-1522143049013-2519756a52d4.jpg' %}"  alt="How can we help you today?">
+    <section class="hero py-6 py-lg-7 text-white dark-overlay"><img class="bg-image" src="{% static 'img/photo/cytonn-photography.jpeg' %}"  alt="How can we help you today?">
       <div class="container overlay-content">
         <!-- Breadcrumbs -->
         <ol class="breadcrumb text-white justify-content-center no-border mb-0">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
           <li class="breadcrumb-item active">Contact                         </li>
         </ol>
-        <h1 class="hero-heading">How can we help you today?</h1>
+        <h1 class="hero-heading">Comment pouvons-nous t'aider aujourd'hui ?</h1>
       </div>
     </section>
     <section class="py-6">

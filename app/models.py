@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.manager import ManagerDescriptor
 from django.utils import timezone
 
 # Create your models here.
@@ -44,7 +45,7 @@ class SubArea(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.FileField(upload_to='avatars', default='avatars/avatar-default-1.jpeg')
+    avatar = models.FileField(upload_to='avatars', default='avatars/avatar-default-1.png')
     about = models.CharField(max_length=1000, null=True)
     slogan = models.CharField(max_length=500, null=True)
     birthyear = models.IntegerField(null=True) 
@@ -106,3 +107,20 @@ class Review(models.Model):
 
     def __str__(self):
         return self.comment
+
+# class Day(models.Model):
+#     name = models.CharField(max_length=8)
+
+#     def __str__(self):
+#         return self.name
+
+# class BusinessHours(models.Model):
+#     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)   
+#     day = models.ForeignKey(Day, on_delete=models.CASCADE)
+#     time_open = models.TimeField(auto_now=False, auto_now_add=False, null=True)
+#     time_close = models.TimeField(auto_now=False, auto_now_add=False, null=True)
+
+#     def __str__(self):
+#         return self.day
+
+
