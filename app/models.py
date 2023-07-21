@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.manager import ManagerDescriptor
 from django.utils import timezone
 
+
 # Create your models here.
 class Country(models.Model):
     name = models.CharField(max_length=30)
@@ -10,6 +11,7 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
@@ -19,6 +21,7 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+
 class Locality(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
@@ -26,6 +29,7 @@ class Locality(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Area(models.Model):
     locality = models.ForeignKey(Locality, on_delete=models.CASCADE)
@@ -35,6 +39,7 @@ class Area(models.Model):
     def __str__(self):
         return self.name
 
+
 class SubArea(models.Model):
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
     name = models.CharField(max_length=70)
@@ -43,12 +48,13 @@ class SubArea(models.Model):
     def __str__(self):
         return self.name
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.FileField(upload_to='avatars', default='avatars/avatar-default-1.png')
+    avatar = models.FileField(upload_to='avatars', default='avatars/user.png')
     about = models.CharField(max_length=1000, null=True)
     slogan = models.CharField(max_length=500, null=True)
-    birthyear = models.IntegerField(null=True) 
+    birthday = models.DateField(null=True)
     phone = models.CharField(max_length=20, null=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -57,11 +63,13 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class GigCategory(models.Model):
     name = models.CharField(max_length=70)
 
     def __str__(self):
         return self.name
+
 
 class Gig(models.Model):
     STATUS_CHOICES = (
@@ -91,12 +99,14 @@ class Gig(models.Model):
     def __str__(self):
         return self.title
 
+
 class GigImage(models.Model):
     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
     image = models.FileField(upload_to='gigs', null=True, blank=True)
 
     def __str__(self):
         return self.gig.title
+
 
 class Review(models.Model):
     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
@@ -122,5 +132,3 @@ class Review(models.Model):
 
 #     def __str__(self):
 #         return self.day
-
-

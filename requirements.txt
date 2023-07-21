@@ -12,3 +12,6 @@ psycopg2-binary==2.8.6
 pytz==2020.5
 sqlparse==0.4.1
 testresources==2.0.1
+six
+twilio
+django-smtp-ssl

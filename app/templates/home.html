@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page %}
-
+    {% include 'messaging.html' %}
     <section class="hero-home">
       <div class="swiper-container hero-slider">
         <div class="swiper-wrapper dark-overlay">
@@ -118,7 +118,6 @@
                     <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
                     <div class="card-img-overlay-bottom z-index-20">
                       <div class="media text-white text-sm align-items-center">
-                        <img class="avatar avatar-border-white mr-2" src="/media/{{ gig.user.profile.avatar }}" alt="{{ gig.title }}"/>
                         <div class="media-body"> {{ gig.user.first_name }}</div>
                       </div>
                     </div>

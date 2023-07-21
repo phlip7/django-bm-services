@@ -26,7 +26,7 @@
               </div>
               <p class="text-sm text-muted">
                 <i class="fa fa-id-card fa-fw mr-2"></i>{{ user.first_name }} {{ user.last_name }}<br>
-                <i class="fa fa-birthday-cake fa-fw mr-2"></i> {{ profile.birthyear }} <br>
+                <i class="fa fa-birthday-cake fa-fw mr-2"></i> {{ profile.birthday }} <br>
                 <i class="fa fa-envelope-open fa-fw mr-2"></i>{{ user.email }}  <span class="mx-2"> | </span>  
                 <i class="fa fa-phone fa-fw mr-2"></i>{{ profile.phone }} 
               </p>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group col-md-6">
                       <label class="form-label" for="date">Année de Naissance</label>
-                      <input class="form-control" type="number" minlength="4" maxlength="4" name="birthyear" id="birthyear" value="{{ profile.birthyear }}">
+                      <input class="form-control" type="number" minlength="4" maxlength="4" name="birthday" id="birthyear" value="{{ profile.birthday }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label class="form-label" for="email">Email</label>

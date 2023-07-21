@@ -1,15 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 # from PIL import Image
 from .filters import GigFilter
-from .forms import CreateUserForm, GigForm
+from .forms import CreateUserForm, GigForm, PasswordResetForm, SetPasswordForm
 from django.db.models import Q
 from .models import *
+from .tokens import account_activation_token
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+
+from .send_sms import send_sms
 
 
 # Create your views here.
@@ -31,31 +41,95 @@ def signup(request):
             form = CreateUserForm(request.POST)
             # print(form)
             if form.is_valid():
+                register_type = form.cleaned_data.get('registration_type')
                 user = User()
                 user.username = form.cleaned_data.get('username')
                 user.first_name = form.cleaned_data.get('first_name')
                 user.last_name = form.cleaned_data.get('last_name')
-                user.email = form.cleaned_data.get('email')
+                user.email = form.cleaned_data.get('email').lower() if register_type == 'email' else ''
                 user.set_password(form.cleaned_data.get('password1'))
+                user.is_active = False
                 user.save()
 
-                usernam = form.cleaned_data.get('username')
+                username = form.cleaned_data.get('username')
                 country = form.cleaned_data.get('country')
                 city = form.cleaned_data.get('city')
 
                 profile = Profile()
-                profile.user = User.objects.get(username=usernam)
-                profile.birthyear = form.cleaned_data.get('birthyear')
-                profile.phone = form.cleaned_data.get('phone')
+                profile.user = User.objects.get(username=username)
+                profile.birthday = form.cleaned_data.get('birthday')
+                profile.phone = form.cleaned_data.get('phone') if register_type == 'phone' else ''
                 profile.country = Country.objects.get(name=country)
                 profile.city = City.objects.get(name=city)
                 profile.save()
                 # form.save()
-                messages.success(request, 'Compte créé pour ' + usernam)
-                return redirect('signin')
+                result = activate_via_email_or_sms(request, user, profile, form.cleaned_data.get('email'),
+                                                   register_type)
+                # messages.success(request, 'Compte créé pour ' + usernam)
+                if result:
+                    return redirect('signin')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
 
         context = {'form': form}
         return render(request, 'signup.html', context)
+
+
+def activate_via_email_or_sms(request, user, profile, to_email, register_type):
+    domain = get_current_site(request).domain
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = account_activation_token.make_token(user)
+    protocol = 'https' if request.is_secure() else 'http'
+    sms_url = f'{protocol}://{domain}/activate/{uid}/{token}'
+    if register_type == 'email':
+        mail_subject = "Activez votre compte utilisateur."
+        message = render_to_string("email_templates/activate_account.html", {
+            'user': user.username,
+            'domain': domain,
+            'uid': uid,
+            'token': token,
+            "protocol": protocol
+        })
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        if email.send():
+            messages.success(request,
+                             f'Cher <b>{user}</b>, Veuillez vous rendre dans votre boîte de réception e-mail <b>{to_email}</b> et cliquer sur le lien d\'activation reçu pour confirmer et terminer l\'inscription.')
+            return True
+        else:
+            messages.error(request,
+                           f'Problème d\'envoi d\'e-mail à {to_email}, vérifiez si vous l\'avez saisi correctement.')
+            return False
+    else:
+        sms_body = f'Veuillez cliquer sur le lien ci-dessous pour confirmer votre inscription:\n' \
+                   f'{sms_url}'
+        res_is_ok = send_sms(sms_body, profile.phone)
+        if not res_is_ok:
+            messages.error(request, "Échec de l'envoi du lien de vérification sur votre téléphone.")
+            return False
+        else:
+            messages.success(request, "Nous avons envoyé le lien de vérification sur votre téléphone avec succès.")
+            return True
+
+
+def activate(request, uidb64, token):
+    user_info = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = user_info.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        return redirect('signin')
+    else:
+        messages.error(request, "Activation link is invalid!")
+
+    return redirect('home')
 
 
 def signin(request):
@@ -88,6 +162,99 @@ def auth(request, username, password):
     else:
         messages.info(request, 'email OU mot de passe incorrect')
         return redirect('signin')
+
+
+def password_reset_request(request):
+    if request.method == 'POST':
+        email_or_phone = request.POST.get('email')
+        user_by_email = User.objects.filter(email=email_or_phone.lower())
+        profile_by_phone = Profile.objects.filter(phone=email_or_phone)
+        # 0->Email, 1->Phone
+        verify_type = 0
+        if len(user_by_email) > 0:
+            associated_user = user_by_email[0]
+        elif len(profile_by_phone) > 0:
+            verify_type = 1
+            associated_user = profile_by_phone[0].user
+        else:
+            print("=======Can't find data======")
+            messages.error(request, "L'e-mail ou le numéro de téléphone est incorrect.")
+            return redirect('password_reset')
+        # SMS or Email Content Info
+        domain = get_current_site(request).domain
+        uid = urlsafe_base64_encode(force_bytes(associated_user.pk))
+        token = account_activation_token.make_token(associated_user)
+        protocol = 'https' if request.is_secure() else 'http'
+        sms_url = f'{protocol}://{domain}/reset/{uid}/{token}'
+        has_sent = False
+        if verify_type == 0:
+            subject = "Demande de réinitialisation du mot de passe"
+            message = render_to_string("email_templates/reset_password.html", {
+                'user': associated_user,
+                'domain': domain,
+                'uid': uid,
+                'token': token,
+                "protocol": protocol
+            })
+            email = EmailMessage(subject, message, to=[associated_user.email])
+            if email.send():
+                has_sent = True
+                messages.success(request,
+                                 """<h2>Réinitialisation du mot de passe envoyée</h2><hr> <p> Nous vous avons 
+                                 envoyé par e-mail des instructions pour définir votre mot de passe, si un compte 
+                                 existe avec l'e-mail que vous avez saisi. Vous devriez les recevoir sous 
+                                 peu.<br>Si vous ne recevez pas d'e-mail, assurez-vous d'avoir entré l'adresse 
+                                 avec laquelle vous vous êtes inscrit et vérifiez votre dossier spam. </p> """
+                                 )
+            else:
+                messages.error(request, "Problème d'envoi de l'e-mail de réinitialisation du mot de passe, <b>SERVER PROBLEM</b>")
+        else:
+            sms_body = f'Veuillez suivre ce lien pour réinitialiser votre mot de passe:\n' \
+                       f'{sms_url}'
+            has_sent = send_sms(sms_body, profile_by_phone[0].phone)
+            if has_sent:
+                messages.success(request, "Envoyé un lien de réinitialisation du mot de passe sur votre téléphone.")
+            else:
+                messages.error(request, "Échec de l'envoi du lien de réinitialisation du mot de passe par SMS.")
+
+        # Redirect to Home when sending SMS or Email is success
+        if has_sent:
+            return redirect('home')
+
+    form = PasswordResetForm()
+    return render(
+        request=request,
+        template_name="password_reset.html",
+        context={"form": form}
+    )
+
+
+def passwordResetConfirm(request, uidb64, token):
+    user_info = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = user_info.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Your password has been set. You may go ahead and <b>log in </b> now.")
+                return redirect('home')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+
+        form = SetPasswordForm(user)
+        return render(request, 'password_reset_confirm.html', {'form': form})
+    else:
+        messages.error(request, "Link is expired")
+
+    messages.error(request, 'Something went wrong, redirecting back to Homepage')
+    return redirect("home")
 
 
 # def resize_image(imagename, ref_size):
@@ -150,7 +317,8 @@ def gig_detail(request, id):
     gig_images = GigImage.objects.filter(gig=gig)
     gig_similars = Gig.objects.filter(category=gig.category)
     return render(request, 'gig-detail.html',
-                  {"gig":gig, "geoloc_display":geoloc_display, "reviews":reviews, "gig_images":gig_images, "gig_similars":gig_similars})
+                  {"gig": gig, "geoloc_display": geoloc_display, "reviews": reviews, "gig_images": gig_images,
+                   "gig_similars": gig_similars})
 
 
 @login_required(login_url="signin")
@@ -269,7 +437,7 @@ def personal_info(request, username):
             user.email = request.POST['email']
             user.save()
             profile = Profile.objects.get(user=user.id)
-            profile.birthyear = request.POST['birthyear']
+            profile.birthday = request.POST['birthday']
             profile.phone = request.POST['phone']
             profile.save()
             return redirect('personal_info', username)
