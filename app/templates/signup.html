@@ -104,7 +104,6 @@
         $(document).ready(function () {
             let iniAccountType = $("#account_type").find(":selected").val();
             changeRegistrationType(iniAccountType);
-            console.log("=====Select option type===", iniAccountType);
 
             $("#account_type").on('change', function () {
                 let accountType = this.value

@@ -54,7 +54,7 @@ class Profile(models.Model):
     avatar = models.FileField(upload_to='avatars', default='avatars/user.png')
     about = models.CharField(max_length=1000, null=True)
     slogan = models.CharField(max_length=500, null=True)
-    birthday = models.DateField(null=True)
+    birthday = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=20, null=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)

@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from baramogo import settings
 from .models import *
 from django import forms
+import datetime
 import django.forms.utils
 import django.forms.widgets
 
@@ -61,6 +62,30 @@ class SetPasswordForm(SetPasswordForm):
 class PasswordResetForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+
+class ProfileForm(forms.ModelForm):
+    birthday = forms.DateField(widget=forms.TextInput(attrs={
+        'class': 'datepicker form-control',
+        'placeholder': 'dd/mm/yyyy'
+    }), input_formats=settings.DATE_INPUT_FORMATS)
+    phone = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), required=False)
+
+    class Meta:
+        model = Profile
+        fields = ['birthday', 'phone']
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user is not None:
+            profile = Profile.objects.get(user=user.id)
+            if profile:
+                if profile.phone:
+                    self.fields['phone'].initial = profile.phone
+                if profile.birthday:
+                    self.fields['birthday'].initial = profile.birthday.strftime('%d/%m/%Y')
 
 
 class GigForm(forms.ModelForm):

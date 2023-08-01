@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 # from PIL import Image
 from .filters import GigFilter
-from .forms import CreateUserForm, GigForm, PasswordResetForm, SetPasswordForm
+from .forms import CreateUserForm, GigForm, ProfileForm, PasswordResetForm, SetPasswordForm
 from django.db.models import Q
 from .models import *
 from .tokens import account_activation_token
@@ -424,8 +424,10 @@ def account(request):
 def personal_info(request, username):
     countries = Country.objects.all()
     cities = City.objects.all()
+    form = ProfileForm(user=request.user)
 
     if request.method == 'POST':
+        form = ProfileForm(request.POST)
         profile = Profile.objects.get(user=request.user)
         user = User.objects.get(username=username)
         form_id = request.POST.get('form_id')
@@ -437,8 +439,9 @@ def personal_info(request, username):
             user.email = request.POST['email']
             user.save()
             profile = Profile.objects.get(user=user.id)
-            profile.birthday = request.POST['birthday']
-            profile.phone = request.POST['phone']
+            if form.is_valid():
+                profile.birthday = form.cleaned_data.get('birthday')
+                profile.phone = form.cleaned_data.get('phone')
             profile.save()
             return redirect('personal_info', username)
         elif form_id == 'addr':
@@ -450,7 +453,7 @@ def personal_info(request, username):
         elif form_id == 'profl':
             profile.about = request.POST['about']
             profile.slogan = request.POST['slogan']
-            if request.FILES['avatar']:
+            if 'avatar' in request.FILES:
                 avatar = request.FILES['avatar']
                 print(avatar)
                 profile.avatar = avatar
@@ -465,7 +468,7 @@ def personal_info(request, username):
         except Profile.DoesNotExist:
             return redirect('/')
 
-    return render(request, 'personal-info.html', {"profile": profile, "countries": countries, "cities": cities})
+    return render(request, 'personal-info.html', {"profile": profile, "countries": countries, "cities": cities, "form": form})
 
 
 @login_required(login_url="/")

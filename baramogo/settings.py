@@ -15,9 +15,6 @@ import environ
 import dj_database_url
 from django.conf.global_settings import DATABASES
 
-env = environ.Env(DEBUG=(bool, True), SECRET_KEY=(str, ''), DATABASE_URL=(str, ""))
-environ.Env.read_env()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,9 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = "e5c^g960x*x)7&iwmij2pans%9vl87w9z*qulkso#zod#xhmw)"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '143.110.214.23', '127.0.0.1', '206.81.14.67']
 
@@ -86,14 +84,23 @@ WSGI_APPLICATION = 'baramogo.wsgi.application'
 #         'PORT': '5432',
 #     }
 # }
-
-# DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
     }
 }
+
+# DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -141,11 +148,11 @@ if DEBUG:
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
 else:
-    EMAIL_HOST = os.environ['EMAIL_HOST']
-    EMAIL_FROM = os.environ['EMAIL_FROM']
-    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-    EMAIL_PORT = os.environ['EMAIL_PORT']
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_FROM = os.environ.get('EMAIL_FROM')
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT')
     EMAIL_USE_TLS = True
 PASSWORD_RESET_TIMEOUT = 14400
 # Setup upload directory for Gig model
