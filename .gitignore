@@ -4,3 +4,4 @@
 venv/
 baramogo/.env
 /baramogo/.env
+.env
