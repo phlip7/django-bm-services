@@ -5,3 +5,5 @@ venv/
 baramogo/.env
 /baramogo/.env
 .env
+.vscode/
+db.sqlite3
