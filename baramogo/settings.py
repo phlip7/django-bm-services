@@ -11,11 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import ast
-import distutils
 from pathlib import Path
 from dotenv import load_dotenv
-import dj_database_url
-from django.conf.global_settings import DATABASES
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +37,7 @@ def get_bool_from_env(name, default_value):
 
 DEBUG = get_bool_from_env("DEBUG", True)
 ALLOWED_HOSTS = ['localhost', '143.110.214.23', '127.0.0.1', '206.81.14.67']
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -86,18 +83,18 @@ WSGI_APPLICATION = 'baramogo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': '',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
+    }
+}
 
-DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+# DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -139,7 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
 # Emailing settings
@@ -160,4 +157,4 @@ else:
 PASSWORD_RESET_TIMEOUT = 14400
 # Setup upload directory for Gig model
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
