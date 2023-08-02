@@ -68,6 +68,14 @@ jobs:
           echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env
           echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
           echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+          echo "NAMESPACE=${{ secrets.EMAIL_HOST }}" >> .env
+          echo "NAMESPACE=${{ secrets.EMAIL_FROM }}" >> .env
+          echo "NAMESPACE=${{ secrets.EMAIL_PORT }}" >> .env
+          echo "NAMESPACE=${{ secrets.EMAIL_HOST_USER }}" >> .env
+          echo "NAMESPACE=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+          echo "NAMESPACE=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env
+          echo "NAMESPACE=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env
+          echo "NAMESPACE=${{ secrets.TWILIO_NUMBER }}" >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
