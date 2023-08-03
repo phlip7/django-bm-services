@@ -3,84 +3,112 @@
 
 {% block page %}
     <section class="py-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 mr-lg-auto">
-            <div class="card border-0 shadow mb-6 mb-lg-0">
-              <div class="card-header bg-gray-100 py-4 border-0 text-center">
-                <a class="d-inline-block" href="#"><img class="d-block avatar avatar-xxl p-2 mb-2" src="/media/{{ profile.avatar }}" alt=""></a> 
-                <h5>{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
-                <p class="text-muted text-sm mb-0">{{ profile.city }}, {{ profile.country }}  </p>
-              </div>
-              <div class="card-body p-4">
-                <div class="media align-items-center mb-3">
-                  <div class="icon-rounded icon-rounded-sm bg-primary-light mr-2">
-                    <svg class="svg-icon text-primary svg-icon-md">
-                      <use xlink:href="#diploma-1"> </use>
-                    </svg>
-                  </div>
-                  <div class="media-body">
-                    <p class="mb-0">{{ gigs|length}} services</p>
-                  </div>
-                </div>
-                <hr>
-                <small class="form-text text-muted" id="propertyTypeHelp">Contacts disponibles dans les services </small>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9 pl-lg-5">
-            <h1 class="hero-heading mb-0">Hello, je suis {{ profile.user.first_name }}!</h1>
-            <div class="text-block">
-              <p> <span class="badge badge-secondary-light">  Membre depuis {{ profile.user.date_joined }}</span></p>
-              <p class="text-muted"> {{ profile.about }} </p>
-              <p class="text-muted"> Mon SLOGAN : {{ profile.slogan }} </p>
-              {% if user == profile.user %}
-                <button class="btn btn-outline-primary"><a href="{% url 'personal_info' profile.user.username %}"> Modifier Profil</a></button>
-              {% endif %}
-            </div>
-            <div class="text-block">
-              <h4 class="mb-5"> Services de {{ profile.user.first_name }}</h4>
-              <div class="row">
-           
-              <!-- place item-->
-              {% for gig in gigs %}
-
-                <div class="col-sm-6 col-lg-4 mb-30px hover-animate" data-marker-id="59c0c8e33b1527bfe2abaf92">
-                  <div class="card h-100 border-0 shadow">
-                    <div class="card-img-top overflow-hidden gradient-overlay"> 
-                      <img class="img-fluid" src="{% static 'img/photo/photo-1484154218962-a197022b5858.jpg' %}" alt="Modern, Well-Appointed Room"/>
-                      <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
-                      <div class="card-img-overlay-bottom z-index-20">
-                        <div class="media text-white text-sm align-items-center"><img class="avatar avatar-border-white mr-2" src="{% static 'img/avatar/avatar-0.jpg' %}" alt="Pamela"/>
-                          <div class="media-body">{{ profile.user.first_name }}</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 mr-lg-auto">
+                    <div class="card border-0 shadow mb-6 mb-lg-0">
+                        <div class="card-header bg-gray-100 py-4 border-0 text-center">
+                            <a class="d-inline-block" href="#">
+                                {% if profile.avatar %}
+                                    <img class="d-block avatar avatar-xxl p-2 mb-2" src="/media/{{ profile.avatar }}"
+                                         alt="">
+                                {% else %}
+                                    <img class="d-block avatar avatar-xxl p-2 mb-2"
+                                         src="{% static 'img/avatar/user.png' %}" alt="avatar">
+                                {% endif %}
+                            </a>
+                            <h5>{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
+                            <p class="text-muted text-sm mb-0">{{ profile.location.address }}  </p>
                         </div>
-                      </div>
-                      <div class="card-img-overlay-top text-right"><a class="card-fav-icon position-relative z-index-40" href="javascript: void();"> 
-                          <svg class="svg-icon text-white">
-                            <use xlink:href="#heart-1"> </use>
-                          </svg></a>
-                      </div> 
-                    </div>
-                    <div class="card-body d-flex align-items-center">
-                      <div class="w-100">
-                        <h6 class="card-title"><a class="text-decoration-none text-dark" href="{% url 'gig_detail' gig.id %}"> {{ gig.title|slice:"0:45" }} </a></h6>
-                        <div class="d-flex card-subtitle mb-3">
-                          <p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:35" }}...</p>
-                          <p class="flex-shrink-1 mb-0 card-stars text-xs text-right"><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i>
-                          </p>
+                        <div class="card-body p-4">
+                            <div class="media align-items-center mb-3">
+                                <div class="icon-rounded icon-rounded-sm bg-primary-light mr-2">
+                                    <svg class="svg-icon text-primary svg-icon-md">
+                                        <use xlink:href="#diploma-1"></use>
+                                    </svg>
+                                </div>
+                                <div class="media-body">
+                                    <p class="mb-0">{{ gigs|length }} services</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <small class="form-text text-muted" id="propertyTypeHelp">Contacts disponibles dans les
+                                services </small>
                         </div>
-                        <p class="card-text text-muted"><span class="h4 text-primary">cfa {{ gig.price }}</span> /h</p>
-                      </div>
                     </div>
-                  </div>
                 </div>
+                <div class="col-lg-9 pl-lg-5">
+                    <h1 class="hero-heading mb-0">Hello, je suis {{ profile.user.first_name }}!</h1>
+                    <div class="text-block">
+                        <p><span
+                                class="badge badge-secondary-light">  Membre depuis {{ profile.user.date_joined }}</span>
+                        </p>
+                        <p class="text-muted"> {{ profile.about }} </p>
+                        <p class="text-muted"> Mon SLOGAN : {{ profile.slogan }} </p>
+                        {% if user == profile.user %}
+                            <button class="btn btn-outline-primary"><a
+                                    href="{% url 'personal_info' profile.user.username %}"> Modifier Profil</a></button>
+                        {% endif %}
+                    </div>
+                    <div class="text-block">
+                        <h4 class="mb-5"> Services de {{ profile.user.first_name }}</h4>
+                        <div class="row">
 
-              {% endfor %}
-              </div>
+                            <!-- place item-->
+                            {% for gig in gigs %}
+
+                                <div class="col-sm-6 col-lg-4 mb-30px hover-animate"
+                                     data-marker-id="59c0c8e33b1527bfe2abaf92">
+                                    <div class="card h-100 border-0 shadow">
+                                        <div class="card-img-top overflow-hidden gradient-overlay">
+                                            <img class="img-fluid"
+                                                 src="{% static 'img/photo/photo-1484154218962-a197022b5858.jpg' %}"
+                                                 alt="Modern, Well-Appointed Room"/>
+                                            <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
+                                            <div class="card-img-overlay-bottom z-index-20">
+                                                <div class="media text-white text-sm align-items-center"><img
+                                                        class="avatar avatar-border-white mr-2"
+                                                        src="{% static 'img/avatar/avatar-0.jpg' %}" alt="Pamela"/>
+                                                    <div class="media-body">{{ profile.user.first_name }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="card-img-overlay-top text-right"><a
+                                                    class="card-fav-icon position-relative z-index-40"
+                                                    href="javascript: void();">
+                                                <svg class="svg-icon text-white">
+                                                    <use xlink:href="#heart-1"></use>
+                                                </svg>
+                                            </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body d-flex align-items-center">
+                                            <div class="w-100">
+                                                <h6 class="card-title"><a class="text-decoration-none text-dark"
+                                                                          href="{% url 'gig_detail' gig.id %}"> {{ gig.title|slice:"0:45" }} </a>
+                                                </h6>
+                                                <div class="d-flex card-subtitle mb-3">
+                                                    <p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:35" }}...</p>
+                                                    <p class="flex-shrink-1 mb-0 card-stars text-xs text-right"><i
+                                                            class="fa fa-star text-warning"></i><i
+                                                            class="fa fa-star text-warning"></i><i
+                                                            class="fa fa-star text-warning"></i><i
+                                                            class="fa fa-star text-warning"></i><i
+                                                            class="fa fa-star text-warning"></i>
+                                                    </p>
+                                                </div>
+                                                <p class="card-text text-muted"><span
+                                                        class="h4 text-primary">cfa {{ gig.price }}</span> /h</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="text-block"></div>
+                </div>
             </div>
-            <div class="text-block"></div>
-          </div>
         </div>
-      </div>
     </section>
 {% endblock %}

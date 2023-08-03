@@ -5,59 +5,23 @@ from django.utils import timezone
 
 
 # Create your models here.
-class Country(models.Model):
-    name = models.CharField(max_length=30)
-    ggeoloc_url = models.CharField(max_length=1000, null=True)
+class Address(models.Model):
+    address = models.CharField(max_length=255)
+    lat = models.DecimalField(max_digits=25, decimal_places=20)
+    lng = models.DecimalField(max_digits=25, decimal_places=20)
 
     def __str__(self):
-        return self.name
-
-
-class City(models.Model):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
-    ggeoloc_url = models.CharField(max_length=1000, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Locality(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
-    ggeoloc_url = models.CharField(max_length=1000, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Area(models.Model):
-    locality = models.ForeignKey(Locality, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    ggeoloc_url = models.CharField(max_length=1000, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class SubArea(models.Model):
-    area = models.ForeignKey(Area, on_delete=models.CASCADE)
-    name = models.CharField(max_length=70)
-    ggeoloc_url = models.CharField(max_length=1000, null=True)
-
-    def __str__(self):
-        return self.name
+        return self.address
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.FileField(upload_to='avatars', default='avatars/user.png')
+    avatar = models.FileField(upload_to='avatars')
     about = models.CharField(max_length=1000, null=True)
     slogan = models.CharField(max_length=500, null=True)
     birthday = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=20, null=True)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    location = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=100, null=True)
 
     def __str__(self):
@@ -81,16 +45,11 @@ class Gig(models.Model):
     category = models.ForeignKey(GigCategory, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length=1000)
     price = models.CharField(max_length=500, default=0)
-    cover_image = models.FileField(upload_to='gigs', default='gigs/baramogo-default-gig-1.jpeg')
+    cover_image = models.FileField(upload_to='gigs')
     status = models.BooleanField(default=True, choices=STATUS_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=timezone.now)
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-    locality = models.ForeignKey(Locality, on_delete=models.SET_NULL, null=True)
-    area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True)
-    subarea = models.ForeignKey(SubArea, on_delete=models.SET_NULL, null=True)
-    address = models.CharField(max_length=200, null=True)
+    location = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     website_link = models.CharField(max_length=50, null=True)
     facebook_link = models.CharField(max_length=500, null=True)
     twitter_link = models.CharField(max_length=500, null=True)
@@ -117,18 +76,3 @@ class Review(models.Model):
 
     def __str__(self):
         return self.comment
-
-# class Day(models.Model):
-#     name = models.CharField(max_length=8)
-
-#     def __str__(self):
-#         return self.name
-
-# class BusinessHours(models.Model):
-#     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)   
-#     day = models.ForeignKey(Day, on_delete=models.CASCADE)
-#     time_open = models.TimeField(auto_now=False, auto_now_add=False, null=True)
-#     time_close = models.TimeField(auto_now=False, auto_now_add=False, null=True)
-
-#     def __str__(self):
-#         return self.day

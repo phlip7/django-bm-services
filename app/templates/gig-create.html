@@ -3,14 +3,7 @@
 
 {% block page %}
 
-  {% if error %}
-    <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>Warning!</strong> {{ error }}
-    </div>
-  {% endif %}
+  {% include 'messaging.html' %}
 
   <div class="progress rounded-0 sticky-top" style="height: 8px; top: 71px;">
     <div class="progress-bar" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
@@ -36,21 +29,21 @@
             <div class="form-group"></div>
             <div class="form-group">
               <label class="form-label" for="form_name">Titre - Nom ou Titre du service</label>
-              {{ form.title }}
+              {{ gig_form.title }}
             </div>
             <div class="form-group">
               <label class="form-label" for="form_type">Categories</label>
-              {{ form.category }}
+              {{ gig_form.category }}
               <small class="form-text text-muted" id="propertyTypeHelp">Choisis la catégorie qui se rapproche le plus de ton service. </small>
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Description</label>
-              {{ form.description }}
+              {{ gig_form.description }}
               <small class="form-text text-muted mt-2" id="descriptionHelp"> Décris ton service.    </small>
             </div>
             <div class="form-group">
               <label class="form-label" for="form_name">Prix - CFA -</label>
-              {{ form.price }}
+              {{ gig_form.price }}
             </div>
           </div>
         </div>
@@ -65,7 +58,7 @@
              <!-- Photo de couverture -->
             <div class="form-group">
               <label class="form-label" for="form_name">Photo de couverture</label>
-              {{ form.cover_image }}
+              {{ gig_form.cover_image }}
               <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
             </div>
              <!-- Photo de service -->
@@ -82,82 +75,19 @@
             <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où sera fourni ton service ? </p>
           </div>
           <div class="col-lg-7 ml-auto">
-            <!-- Country-->
-            <div class="form-group">
-              <label class="form-label" for="form_country">Pays</label>
-              {{ form.country }}
-            </div>
-            <!-- City + Locality -->
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label" for="form_city">Ville</label>
-                  {{ form.city }}
-                </div>
+              <div class="form-group">
+                  <label class="form-label" for="form_country">Sélectionnez l'emplacement</label>
+                  {{ address_form.address }}
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label" for="form_state">Commune</label>
-                  {{ form.locality }}
-                </div>
-              </div>
-            </div>
-            <!-- Area + SubArea-->
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label" for="form_city">Quartier</label>
-                  {{ form.area }}
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label" for="form_state">Quartier - Zone</label>
-                  {{ form.subarea }}
-                </div>
-              </div>
-            </div>
-            <!-- Street-->
-            <div class="form-group">
-              <label class="form-label" for="form_street">Adresse (optionnel)</label>
-              {{ form.address }} 
-            </div>
+              {{ address_form.lat }}
+              {{ address_form.lng }}
           </div>
         </div>
-
-        {% comment %} <div class="row form-block">
-          <div class="col-lg-4">
-            <h4>Heures d'ouverture</h4>
-            <p class="text-muted text-sm">Quelles tes heures d'ouverture et de fermeture ?</p>
-          </div>
-          <div class="col-lg-7 ml-auto">
-            <table class="table text-sm mb-0">
-              {% for day in days %}
-              <tr>
-                <th class="pl-0 border-0">{{ day.name }}</th>
-                <td class="pr-0 text-right border-0"> 
-                  <div class="row">
-                    <div class="col-md-1"> De </div>
-                    <div class="col-md-5">
-                      {{ form.mon_open }}
-                    </div>
-                    <div class="col-md-1"> à </div>
-                    <div class="col-md-5">
-                      {{ form.mon_close }}
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </table>
-          </div>
-        </div> {% endcomment %}
-
         <div class="row form-block">
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="form_state">Statut de l'annonce</label>
-                {{ form.status }}
+                {{ gig_form.status }}
               </div>
             </div>        
             <div class="container text-center"><button type="submit" class="btn btn-primary">Publier</button></div>
@@ -252,6 +182,21 @@
     for (var sel_field in form_select){	
 			form_select[sel_field].className += ' form-control'
 		}
+    function initMap() {
+        const input = document.getElementById("id_address");
+        const options = {
+            fields: ["formatted_address", "geometry", "name"],
+            strictBounds: false,
+        };
+        const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            document.querySelector("#id_lat").value = place.geometry.location.lat();
+            document.querySelector("#id_lng").value = place.geometry.location.lng();
+        })
+    }
+    window.initMap = initMap;
 </script>
 
 {% endblock %}

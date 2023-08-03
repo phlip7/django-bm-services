@@ -35,13 +35,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="loginUsername"> Pays de Residence </label>
-                            {{ form.country }}
+                            <label class="form-label" for="loginUsername"> Sélectionnez l'emplacement </label>
+                            {{ form.address }}
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="loginUsername"> Ville </label>
-                            {{ form.city }}
-                        </div>
+
+                        {{ form.lat }}
+
+                        {{ form.lng }}
 
                         <div class="form-group">
                             <label class="form-label" for="loginUsername">Sélectionner e-mail ou téléphone</label>
@@ -120,6 +120,22 @@
                 $("#account_phone").hide();
             }
         }
+
+        function initMap() {
+            const input = document.getElementById("id_address");
+            const options = {
+                fields: ["formatted_address", "geometry", "name"],
+                strictBounds: false,
+            };
+            const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                document.querySelector("#id_lat").value = place.geometry.location.lat();
+                document.querySelector("#id_lng").value = place.geometry.location.lng();
+            })
+        }
+        window.initMap = initMap;
     </script>
 
 {% endblock %}
