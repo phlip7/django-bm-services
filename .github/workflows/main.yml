@@ -3,8 +3,8 @@ name: Continuous Integration and Delivery
 on: [push]
 
 env:
-  WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/web:latest
-  NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/nginx:latest
+  WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/web
+  NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/nginx
 
 jobs:
 
@@ -27,8 +27,8 @@ jobs:
           echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
       - name: Set environment variables
         run: |
-          echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
-          echo "NGINX_IMAGE=$(echo ${{env.NGINX_IMAGE}} )" >> $GITHUB_ENV
+          echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}})${{GITHUB_SHA}}" >> $GITHUB_ENV
+          echo "NGINX_IMAGE=$(echo ${{env.NGINX_IMAGE}})${{GITHUB_SHA}}" >> $GITHUB_ENV
       - name: Log in to GitHub Packages
         run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
@@ -64,8 +64,8 @@ jobs:
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
           echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
           echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
-          echo "WEB_IMAGE=${{ env.WEB_IMAGE }}" >> .env
-          echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env
+          echo "WEB_IMAGE=${{ env.WEB_IMAGE }}${{GITHUB_SHA}}" >> .env
+          echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}${{GITHUB_SHA}}" >> .env
           echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
           echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
           echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
