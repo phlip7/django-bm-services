@@ -108,6 +108,9 @@
             <div class="form-group">
               <label class="form-label" for="form_country">Modifier l'emplacement</label>
                 <input class="form-control" type="text" name="address" id="id_address" value="{{ address.address }}" required>
+                <input type="hidden" name="country" id="id_country" class="form-control" value="{{ address.country }}">
+                <input type="hidden" name="city" id="id_city" class="form-control" value="{{ address.city }}">
+                <input type="hidden" name="area" id="id_area" class="form-control" value="{{ address.area }}">
                 <input type="hidden" name="lat" id="id_lat" class="form-control" value="{{ address.lat }}">
                 <input type="hidden" name="lng" id="id_lng" class="form-control" value="{{ address.lng }}">
             </div>
@@ -174,15 +177,25 @@
     function initMap() {
         const input = document.getElementById("id_address");
         const options = {
-            fields: ["formatted_address", "geometry", "name"],
+            types: ['neighborhood', 'locality', 'sublocality', 'postal_code'],
             strictBounds: false,
         };
         const autocomplete = new google.maps.places.Autocomplete(input, options);
 
         autocomplete.addListener("place_changed", () => {
             const place = autocomplete.getPlace();
-            document.querySelector("#id_lat").value = place.geometry.location.lat();
-            document.querySelector("#id_lng").value = place.geometry.location.lng();
+                let area = ""
+                const displayArea = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['sublocality_level_1', 'sublocality', 'political']));
+                if (displayArea.length) {
+                    area = displayArea[0].long_name
+                }
+                const displayCity = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['locality', 'political']))[0].long_name;
+                const displayCountry = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['country', 'political']))[0].long_name;
+                document.querySelector("#id_country").value = displayCountry;
+                document.querySelector("#id_city").value = displayCity;
+                document.querySelector("#id_area").value = area;
+                document.querySelector("#id_lat").value = place.geometry.location.lat();
+                document.querySelector("#id_lng").value = place.geometry.location.lng();
         })
     }
     window.initMap = initMap;

@@ -28,6 +28,9 @@ class CreateUserForm(UserCreationForm):
     }), input_formats=settings.DATE_INPUT_FORMATS)
     phone = forms.CharField(widget=forms.TextInput(), required=False)
     address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': "Entrez l'emplacement"}), required=True)
+    country = forms.CharField(widget=forms.HiddenInput(), required=False)
+    city = forms.CharField(widget=forms.HiddenInput(), required=False)
+    area = forms.CharField(widget=forms.HiddenInput(), required=False)
     lat = forms.CharField(widget=forms.HiddenInput(), required=False)
     lng = forms.CharField(widget=forms.HiddenInput(), required=False)
     email = forms.CharField(widget=forms.TextInput(
@@ -100,9 +103,12 @@ class GigForm(forms.ModelForm):
 
 class AddressForm(forms.ModelForm):
     address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': "Entrez l'emplacement"}), required=True)
+    country = forms.CharField(widget=forms.HiddenInput(), required=False)
+    city = forms.CharField(widget=forms.HiddenInput(), required=False)
+    area = forms.CharField(widget=forms.HiddenInput(), required=False)
     lat = forms.CharField(widget=forms.HiddenInput(), required=False)
     lng = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Gig
-        fields = ['address', 'lat', 'lng']
+        fields = ['address', 'country', 'city', 'area', 'lat', 'lng',]

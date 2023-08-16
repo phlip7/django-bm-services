@@ -3,201 +3,225 @@
 
 {% block page %}
 
-  {% include 'messaging.html' %}
+    {% include 'messaging.html' %}
 
-  <div class="progress rounded-0 sticky-top" style="height: 8px; top: 71px;">
-    <div class="progress-bar" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
-  <section class="py-5">
-    <div class="container">
-      <p class="subtitle text-primary">Creation d'un nouveau service</p>
-      <h1 class="h2 mb-5"> Basic information <span class="text-muted float-right">Step 1</span>      </h1>
- 
-      <form method="POST" enctype="multipart/form-data"  id="gigForm" 
-        data-cities-url="{% url 'ajax_load_cities' %}" 
-        data-localities-url="{% url 'ajax_load_localities' %}"
-        data-areas-url="{% url 'ajax_load_areas' %}" 
-        data-subareas-url="{% url 'ajax_load_subareas' %}" >
-        {% csrf_token %}
-
-        <div class="row form-block">
-          <div class="col-lg-4">
-            <h4>Basic</h4>
-            <p class="text-muted text-sm">Quel service veux-tu proposer ? </p>
-          </div>
-          <div class="col-lg-7 ml-auto">
-            <div class="form-group"></div>
-            <div class="form-group">
-              <label class="form-label" for="form_name">Titre - Nom ou Titre du service</label>
-              {{ gig_form.title }}
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="form_type">Categories</label>
-              {{ gig_form.category }}
-              <small class="form-text text-muted" id="propertyTypeHelp">Choisis la catégorie qui se rapproche le plus de ton service. </small>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="form_name">Description</label>
-              {{ gig_form.description }}
-              <small class="form-text text-muted mt-2" id="descriptionHelp"> Décris ton service.    </small>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="form_name">Prix - CFA -</label>
-              {{ gig_form.price }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row form-block">
-          <div class="col-lg-4">
-            <h4>Photos</h4>
-            <p class="text-muted text-sm">Ajoutes une photo de couverture et quelques photos de ton service</p>
-          </div>
-          <div class="col-lg-7 ml-auto">
-            <div class="form-group"></div>
-             <!-- Photo de couverture -->
-            <div class="form-group">
-              <label class="form-label" for="form_name">Photo de couverture</label>
-              {{ gig_form.cover_image }}
-              <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une photo/image qui illustre ton service </small>
-            </div>
-             <!-- Photo de service -->
-            <div class="form-group">
-              <label class="form-label" for="form_name">Photo.s de service</label>
-              <input type="file" multiple accept="image/*" class="form-control" name="images" id="id_images">
-              <small class="form-text text-muted mt-2" id="descriptionHelp">importes quelques photos de ton service </small>
-            </div>
-          </div>
-        </div>   
-        <div class="row form-block">
-          <div class="col-lg-4">
-            <h4>Localisation</h4>
-            <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où sera fourni ton service ? </p>
-          </div>
-          <div class="col-lg-7 ml-auto">
-              <div class="form-group">
-                  <label class="form-label" for="form_country">Sélectionnez l'emplacement</label>
-                  {{ address_form.address }}
-              </div>
-              {{ address_form.lat }}
-              {{ address_form.lng }}
-          </div>
-        </div>
-        <div class="row form-block">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label" for="form_state">Statut de l'annonce</label>
-                {{ gig_form.status }}
-              </div>
-            </div>        
-            <div class="container text-center"><button type="submit" class="btn btn-primary">Publier</button></div>
-        </div>
-      </form>
+    <div class="progress rounded-0 sticky-top" style="height: 8px; top: 71px;">
+        <div class="progress-bar" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0"
+             aria-valuemax="100"></div>
     </div>
-  </section>
+    <section class="py-5">
+        <div class="container">
+            <p class="subtitle text-primary">Creation d'un nouveau service</p>
+            <h1 class="h2 mb-5"> Basic information <span class="text-muted float-right">Step 1</span></h1>
 
-<!-- Below Ajax scripts to set dependent form dropdown values  -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-    $("#id_country").change(function () {
-        const url = $("#gigForm").attr("data-cities-url");  // get the url of the `load_cities` view
-        const countryId = $(this).val();  // get the selected country ID from the HTML input
+            <form method="POST" enctype="multipart/form-data" id="gigForm"
+                  data-cities-url="{% url 'ajax_load_cities' %}"
+                  data-localities-url="{% url 'ajax_load_localities' %}"
+                  data-areas-url="{% url 'ajax_load_areas' %}"
+                  data-subareas-url="{% url 'ajax_load_subareas' %}">
+                {% csrf_token %}
 
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-            data: {
-                'country_id': countryId       // add the country id to the GET parameters
-            },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
-                /*
-                let html_data = '<option value="">---------</option>';
-                data.forEach(function (city) {
-                    html_data += `<option value="${city.id}">${city.name}</option>`
-                });
-                console.log(html_data);
-                $("#id_city").html(html_data);
-                */
-            }
+                <div class="row form-block">
+                    <div class="col-lg-4">
+                        <h4>Basic</h4>
+                        <p class="text-muted text-sm">Quel service veux-tu proposer ? </p>
+                    </div>
+                    <div class="col-lg-7 ml-auto">
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <label class="form-label" for="form_name">Titre - Nom ou Titre du service</label>
+                            {{ gig_form.title }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="form_type">Categories</label>
+                            {{ gig_form.category }}
+                            <small class="form-text text-muted" id="propertyTypeHelp">Choisis la catégorie qui se
+                                rapproche le plus de ton service. </small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="form_name">Description</label>
+                            {{ gig_form.description }}
+                            <small class="form-text text-muted mt-2" id="descriptionHelp"> Décris ton service. </small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="form_name">Prix - CFA -</label>
+                            {{ gig_form.price }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-block">
+                    <div class="col-lg-4">
+                        <h4>Photos</h4>
+                        <p class="text-muted text-sm">Ajoutes une photo de couverture et quelques photos de ton
+                            service</p>
+                    </div>
+                    <div class="col-lg-7 ml-auto">
+                        <div class="form-group"></div>
+                        <!-- Photo de couverture -->
+                        <div class="form-group">
+                            <label class="form-label" for="form_name">Photo de couverture</label>
+                            {{ gig_form.cover_image }}
+                            <small class="form-text text-muted mt-2" id="descriptionHelp">Si possible, importes une
+                                photo/image qui illustre ton service </small>
+                        </div>
+                        <!-- Photo de service -->
+                        <div class="form-group">
+                            <label class="form-label" for="form_name">Photo.s de service</label>
+                            <input type="file" multiple accept="image/*" class="form-control" name="images"
+                                   id="id_images">
+                            <small class="form-text text-muted mt-2" id="descriptionHelp">importes quelques photos de
+                                ton service </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-block">
+                    <div class="col-lg-4">
+                        <h4>Localisation</h4>
+                        <p class="text-muted text-sm">Quelle est la localisation de ton service : Indique l'endroit où
+                            sera fourni ton service ? </p>
+                    </div>
+                    <div class="col-lg-7 ml-auto">
+                        <div class="form-group">
+                            <label class="form-label" for="form_country">Sélectionnez l'emplacement</label>
+                            {{ address_form.address }}
+                        </div>
+                        {{ address_form.country }}
+                        {{ address_form.city }}
+                        {{ address_form.area }}
+                        {{ address_form.lat }}
+                        {{ address_form.lng }}
+                    </div>
+                </div>
+                <div class="row form-block">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="form_state">Statut de l'annonce</label>
+                            {{ gig_form.status }}
+                        </div>
+                    </div>
+                    <div class="container text-center">
+                        <button type="submit" class="btn btn-primary">Publier</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Below Ajax scripts to set dependent form dropdown values  -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#id_country").change(function () {
+            const url = $("#gigForm").attr("data-cities-url");  // get the url of the `load_cities` view
+            const countryId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+                data: {
+                    'country_id': countryId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+                    /*
+                    let html_data = '<option value="">---------</option>';
+                    data.forEach(function (city) {
+                        html_data += `<option value="${city.id}">${city.name}</option>`
+                    });
+                    console.log(html_data);
+                    $("#id_city").html(html_data);
+                    */
+                }
+            });
         });
-    });
 
-    $("#id_city").change(function () {
-        const url = $("#gigForm").attr("data-localities-url"); 
-        const cityId = $(this).val(); 
-        $.ajax({                      
-            url: url,                 
-            data: {
-                'city_id': cityId  
-            },
-            success: function (data) {  
-                $("#id_locality").html(data); 
-            }
+        $("#id_city").change(function () {
+            const url = $("#gigForm").attr("data-localities-url");
+            const cityId = $(this).val();
+            $.ajax({
+                url: url,
+                data: {
+                    'city_id': cityId
+                },
+                success: function (data) {
+                    $("#id_locality").html(data);
+                }
+            });
         });
-    });
 
-    $("#id_locality").change(function () {
-        const url = $("#gigForm").attr("data-areas-url"); 
-        const localityId = $(this).val();  
-        $.ajax({                       
-            url: url,                  
-            data: {
-                'locality_id': localityId      
-            },
-            success: function (data) {  
-                $("#id_area").html(data);
-            }
+        $("#id_locality").change(function () {
+            const url = $("#gigForm").attr("data-areas-url");
+            const localityId = $(this).val();
+            $.ajax({
+                url: url,
+                data: {
+                    'locality_id': localityId
+                },
+                success: function (data) {
+                    $("#id_area").html(data);
+                }
+            });
         });
-    });
 
-    $("#id_area").change(function () {
-        const url = $("#gigForm").attr("data-subareas-url"); 
-        const areaId = $(this).val();  
-        console.log(areaId)       
-        $.ajax({                       
-            url: url,                  
-            data: {
-                'area_id': areaId      
-            },
-            success: function (data) {  
-                $("#id_subarea").html(data);
-            }
+        $("#id_area").change(function () {
+            const url = $("#gigForm").attr("data-subareas-url");
+            const areaId = $(this).val();
+            console.log(areaId)
+            $.ajax({
+                url: url,
+                data: {
+                    'area_id': areaId
+                },
+                success: function (data) {
+                    $("#id_subarea").html(data);
+                }
+            });
         });
-    });
 
-    /* Set <input> class name
-		 */
-		//Query All input fields
-    var form_fields = document.getElementsByTagName('input')
-    for (var field in form_fields){	
-			form_fields[field].className += ' form-control'
-		}
+        /* Set <input> class name
+             */
+        //Query All input fields
+        var form_fields = document.getElementsByTagName('input')
+        for (var field in form_fields) {
+            form_fields[field].className += ' form-control'
+        }
 
-    var form_textarea = document.getElementsByTagName('textarea')
-    for (var ta_field in form_textarea){	
-			form_textarea[ta_field].className += ' form-control'
-		}
+        var form_textarea = document.getElementsByTagName('textarea')
+        for (var ta_field in form_textarea) {
+            form_textarea[ta_field].className += ' form-control'
+        }
 
-    var form_select = document.getElementsByTagName('select')
-    for (var sel_field in form_select){	
-			form_select[sel_field].className += ' form-control'
-		}
-    function initMap() {
-        const input = document.getElementById("id_address");
-        const options = {
-            fields: ["formatted_address", "geometry", "name"],
-            strictBounds: false,
-        };
-        const autocomplete = new google.maps.places.Autocomplete(input, options);
+        var form_select = document.getElementsByTagName('select')
+        for (var sel_field in form_select) {
+            form_select[sel_field].className += ' form-control'
+        }
 
-        autocomplete.addListener("place_changed", () => {
-            const place = autocomplete.getPlace();
-            document.querySelector("#id_lat").value = place.geometry.location.lat();
-            document.querySelector("#id_lng").value = place.geometry.location.lng();
-        })
-    }
-    window.initMap = initMap;
-</script>
+        function initMap() {
+            const input = document.getElementById("id_address");
+            const options = {
+                types: ['neighborhood', 'locality', 'sublocality', 'postal_code'],
+                strictBounds: false,
+            };
+            const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                let area = ""
+                const displayArea = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['sublocality_level_1', 'sublocality', 'political']));
+                if (displayArea.length) {
+                    area = displayArea[0].long_name
+                }
+                const displayCity = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['locality', 'political']))[0].long_name;
+                const displayCountry = place.address_components.filter(f => JSON.stringify(f.types) === JSON.stringify(['country', 'political']))[0].long_name;
+                document.querySelector("#id_country").value = displayCountry;
+                document.querySelector("#id_city").value = displayCity;
+                document.querySelector("#id_area").value = area;
+                document.querySelector("#id_lat").value = place.geometry.location.lat();
+                document.querySelector("#id_lng").value = place.geometry.location.lng();
+            })
+        }
+
+        window.initMap = initMap;
+    </script>
 
 {% endblock %}
 

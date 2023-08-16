@@ -7,6 +7,9 @@ from django.utils import timezone
 # Create your models here.
 class Address(models.Model):
     address = models.CharField(max_length=255)
+    country = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
+    area = models.CharField(max_length=255, null=True, blank=True)
     lat = models.DecimalField(max_digits=25, decimal_places=20)
     lng = models.DecimalField(max_digits=25, decimal_places=20)
 
@@ -57,6 +60,10 @@ class Gig(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def city(self):
+        return self.location.city
 
 
 class GigImage(models.Model):

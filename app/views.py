@@ -54,6 +54,9 @@ def signup(request):
                 # Saving Address
                 address = Address()
                 address.address = form.cleaned_data.get('address')
+                address.country = form.cleaned_data.get('country')
+                address.city = form.cleaned_data.get('city')
+                address.area = form.cleaned_data.get('area')
                 address.lat = form.cleaned_data.get('lat')
                 address.lng = form.cleaned_data.get('lng')
                 address.save()
@@ -328,6 +331,9 @@ def gig_create(request):
                     # Saving Address
                     address = Address()
                     address.address = address_form.cleaned_data.get('address')
+                    address.country = address_form.cleaned_data.get('country')
+                    address.city = address_form.cleaned_data.get('city')
+                    address.area = address_form.cleaned_data.get('area')
                     address.lat = address_form.cleaned_data.get('lat')
                     address.lng = address_form.cleaned_data.get('lng')
                     address.save()
@@ -371,6 +377,7 @@ def gig_edit(request, id):
                         " avant d’importer des photos nouvelles."
             else:
                 if gig_form.is_valid() and address_form.is_valid():
+                    print("==========Saving Address Form=========", address_form)
                     gig.save()
                     address_form.save()
                     if images is not None:

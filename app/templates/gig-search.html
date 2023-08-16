@@ -28,8 +28,16 @@
               {{ gig_filter.form.category }}
             </div>
             <div class="mb-4">
-              <label class="form-label" for="form_type">l'emplacement</label>
-              {{ gig_filter.form.location }}
+              <label class="form-label" for="form_type">Pays</label>
+              {{ gig_filter.form.country }}
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="form_type">Ville</label>
+              {{ gig_filter.form.city }}
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="form_type">Quartier</label>
+              {{ gig_filter.form.area }}
             </div>
             <div class="pb-4">
               <div class="mb-4">
@@ -60,7 +68,7 @@
             {% for gig in gigs %}
             <div class="col-sm-6 col-xl-4 mb-5 hover-animate" data-marker-id="{{ gig.id }}">
               <div class="card h-100 border-0 shadow">
-                <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;"> 
+                <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">
                     {% if gig.cover_image %}
                         <img width="100%" height="100%" src="/media/{{ gig.cover_image }}" alt="{{ gig.title }}"/>
                       {% else %}
@@ -72,7 +80,7 @@
                       <div class="media-body"> {{ gig.user.first_name }} </div>
                     </div>
                   </div>
-                  <div class="card-img-overlay-top text-right"><a class="card-fav-icon position-relative z-index-40" href="javascript: void();"> 
+                  <div class="card-img-overlay-top text-right"><a class="card-fav-icon position-relative z-index-40" href="javascript: void();">
                       <svg class="svg-icon text-white">
                         <use xlink:href="#heart-1"> </use>
                       </svg></a></div>
@@ -111,12 +119,12 @@
   <script>
 		//Query All input fields
 		var form_fields = document.getElementsByTagName('input')
-		for (var field in form_fields){	
+		for (var field in form_fields){
 			form_fields[field].className += ' form-control pr-4'
 		}
 
     var form_select = document.getElementsByTagName('select')
-    for (var sel_field in form_select){	
+    for (var sel_field in form_select){
 			form_select[sel_field].className += ' selectpicker form-control'
 		}
 	</script>
