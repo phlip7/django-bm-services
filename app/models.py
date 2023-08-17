@@ -61,10 +61,6 @@ class Gig(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def city(self):
-        return self.location.city
-
 
 class GigImage(models.Model):
     gig = models.ForeignKey(Gig, on_delete=models.CASCADE)
