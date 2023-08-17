@@ -2,33 +2,31 @@ import django_filters
 from .models import Gig, Address
 
 
-# def get_location_names(name_type):
-#     countries = ()
-#     cities = ()
-#     areas = ()
-#     addresses = Address.objects.all()
-#     for address in addresses:
-#         cities += (address.city, address.city),
-#         countries += (address.country, address.country),
-#         areas += (address.area, address.area),
-#     if name_type == 0:
-#         return countries
-#     elif name_type == 1:
-#         return cities
-#     else:
-#         return areas
+def get_location_names(name_type):
+    countries = ()
+    cities = ()
+    areas = ()
+    addresses = Address.objects.all()
+    for address in addresses:
+        cities += (address.city, address.city),
+        countries += (address.country, address.country),
+        areas += (address.area, address.area),
+    if name_type == 0:
+        return countries
+    elif name_type == 1:
+        return cities
+    else:
+        return areas
 
 
 class GigFilter(django_filters.FilterSet):
-    # country = django_filters.ChoiceFilter(choices=get_location_names(0), label='Country')
-    # city = django_filters.ChoiceFilter(choices=get_location_names(1), label='City')
-    # area = django_filters.ChoiceFilter(choices=get_location_names(2), label='Area')
+    country = django_filters.ChoiceFilter(choices=get_location_names(0), label='Country')
+    city = django_filters.ChoiceFilter(choices=get_location_names(1), label='City')
+    area = django_filters.ChoiceFilter(choices=get_location_names(2), label='Area')
 
     class Meta:
         model = Gig
-        fields = ['title', 'category',
-                  # 'country', 'city', 'area'
-                  ]
+        fields = ['title', 'category', 'country', 'city', 'area']
 
     @property
     def qs(self):
@@ -42,12 +40,12 @@ class GigFilter(django_filters.FilterSet):
             if form_id == "gfilter":
                 if category != "":
                     parent = parent.filter(category=category)
-                # if city and city != "":
-                #     parent = parent.filter(location__city__icontains=city)
-                # if country != "":
-                #     parent = parent.filter(location__country__icontains=country)
-                # if area != "":
-                #     parent = parent.filter(location__area__icontains=area)
+                if city and city != "":
+                    parent = parent.filter(location__city__icontains=city)
+                if country != "":
+                    parent = parent.filter(location__country__icontains=country)
+                if area != "":
+                    parent = parent.filter(location__area__icontains=area)
             else:
                 if city and city != "":
                     parent = parent.filter(location__city__icontains=city)
