@@ -5,35 +5,29 @@ from .models import Gig, Address
 def get_location_names(name_type):
     countries = ()
     cities = ()
-    areas = ()
     if name_type == 0:
         addresses_country = Address.objects.distinct('country')
         for address in addresses_country:
             if address.country:
                 countries += (address.country, address.country),
         return countries
-    elif name_type == 1:
+    else:
         addresses_city = Address.objects.distinct('city')
         for address in addresses_city:
             if address.city:
                 cities += (address.city, address.city),
         return cities
-    else:
-        addresses_area = Address.objects.distinct('area')
-        for address in addresses_area:
-            if address.area:
-                areas += (address.area, address.area),
-        return areas
 
 
 class GigFilter(django_filters.FilterSet):
     country = django_filters.ChoiceFilter(choices=get_location_names(0), label='Country')
     city = django_filters.ChoiceFilter(choices=get_location_names(1), label='City')
-    area = django_filters.ChoiceFilter(choices=get_location_names(2), label='Area')
+    lat = django_filters.NumberFilter()
+    lng = django_filters.NumberFilter()
 
     class Meta:
         model = Gig
-        fields = ['title', 'category', 'country', 'city', 'area']
+        fields = ['title', 'category', 'country', 'city', 'lat', 'lng']
 
     @property
     def qs(self):
@@ -43,7 +37,8 @@ class GigFilter(django_filters.FilterSet):
             category = self.request.GET.get('category')
             country = self.request.GET.get('country')
             city = self.request.GET.get('city')
-            area = self.request.GET.get('area')
+            lat = self.request.GET.get('lat')
+            lng = self.request.GET.get('lng')
             if form_id == "gfilter":
                 if category != "":
                     parent = parent.filter(category=category)
@@ -51,8 +46,11 @@ class GigFilter(django_filters.FilterSet):
                     parent = parent.filter(location__city__icontains=city)
                 if country != "":
                     parent = parent.filter(location__country__icontains=country)
-                if area != "":
-                    parent = parent.filter(location__area__icontains=area)
+                if lat != "" and lng != "":
+                    lat_val = float(lat)
+                    lng_val = float(lng)
+                    parent = parent.filter(location__lat__range=(lat_val - 0.2, lat_val + 0.2),
+                                           location__lng__range=(lng_val - 0.2, lng_val + 0.2))
             else:
                 if city and city != "":
                     parent = parent.filter(location__city__icontains=city)
