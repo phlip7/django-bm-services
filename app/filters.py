@@ -6,16 +6,23 @@ def get_location_names(name_type):
     countries = ()
     cities = ()
     areas = ()
-    addresses = Address.objects.all()
-    for address in addresses:
-        cities += (address.city, address.city),
-        countries += (address.country, address.country),
-        areas += (address.area, address.area),
     if name_type == 0:
+        addresses_country = Address.objects.distinct('country')
+        for address in addresses_country:
+            if address.country:
+                countries += (address.country, address.country),
         return countries
     elif name_type == 1:
+        addresses_city = Address.objects.distinct('city')
+        for address in addresses_city:
+            if address.city:
+                cities += (address.city, address.city),
         return cities
     else:
+        addresses_area = Address.objects.distinct('area')
+        for address in addresses_area:
+            if address.area:
+                areas += (address.area, address.area),
         return areas
 
 
