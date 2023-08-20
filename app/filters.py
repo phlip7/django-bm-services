@@ -2,26 +2,25 @@ import django_filters
 from .models import Gig, Address
 
 
-def get_location_names(name_type):
-    countries = ()
-    cities = ()
-    if name_type == 0:
+class GigFilter(django_filters.FilterSet):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        countries = ()
+        cities = ()
         addresses_country = Address.objects.distinct('country')
+        addresses_city = Address.objects.distinct('city')
         for address in addresses_country:
             if address.country:
                 countries += (address.country, address.country),
-        return countries
-    else:
-        addresses_city = Address.objects.distinct('city')
         for address in addresses_city:
             if address.city:
                 cities += (address.city, address.city),
-        return cities
+        self.filters['city'].extra['choices'] = cities
+        self.filters['country'].extra['choices'] = countries
 
-
-class GigFilter(django_filters.FilterSet):
-    country = django_filters.ChoiceFilter(choices=get_location_names(0), label='Country')
-    city = django_filters.ChoiceFilter(choices=get_location_names(1), label='City')
+    country = django_filters.ChoiceFilter(label='Country')
+    city = django_filters.ChoiceFilter(label='City')
     lat = django_filters.NumberFilter()
     lng = django_filters.NumberFilter()
 

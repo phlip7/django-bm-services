@@ -198,6 +198,7 @@
         function initMap() {
             const input = document.getElementById("id_address");
             const options = {
+                {#fields: ["place_id", "type"],#}
                 types: ['neighborhood', 'locality', 'sublocality', 'postal_code'],
                 strictBounds: false,
             };
