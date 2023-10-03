@@ -24,14 +24,22 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <!-- Favicon-->
     <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+
+    <!-- Vanilla JS Version (V4+) -->
+    <link rel="stylesheet" href="{% static 'vendor/Raty/raty-main/src/raty.css' %}">
+
+    <!-- jQuery Version (V3) -->
+    <link rel="stylesheet" href="{% static 'vendor/Raty/raty-jquery/lib/jquery.raty.css' %}">
+
+
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
     <!-- Google API -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN-aqK4SPxvGQf-XNxgHJTGbqRN2ScUQ4&callback=initMap&libraries=places&v=weekly"
-      defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN-aqK4SPxvGQf-XNxgHJTGbqRN2ScUQ4&callback=initMap&libraries=places&v=weekly"
+            defer
     ></script>
     <!-- Font Awesome CSS-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -40,6 +48,8 @@
     <link rel="stylesheet" href="{% static 'vendor/datetimepicker/jquery.datetimepicker.min.css' %}">
     <!-- jQuery-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script type="module" src="{% static 'vendor/Raty/raty-main/src/raty.js' %}"></script>
+    <script src="{% static 'vendor/Raty/raty-jquery/lib/jquery.raty.js' %}"></script>
 </head>
 <body style="padding-top: 72px;">
 <header class="header">

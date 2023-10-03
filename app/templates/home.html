@@ -4,204 +4,268 @@
 {% block page %}
     {% include 'messaging.html' %}
     <section class="hero-home">
-      <div class="swiper-container hero-slider">
-        <div class="swiper-wrapper dark-overlay">
-          <div class="swiper-slide" style="background-image:url({% static 'img/photo/iStock-609608134.jpeg' %})"></div>
-          <div class="swiper-slide" style="background-image:url({% static 'img/photo/iStock-484798890.jpeg' %})"></div>
-          <div class="swiper-slide" style="background-image:url({% static 'img/photo/iStock-1055936052.jpeg' %})"></div>
-          <div class="swiper-slide" style="background-image:url({% static 'img/photo/iStock-1194667041.jpeg' %})"></div>
-          <div class="swiper-slide" style="background-image:url({% static 'img/photo/iStock-929473012.jpeg' %})"></div>
-        </div>
-      </div>
-      <div class="container py-6 py-md-7 text-white z-index-20">
-        <div class="row">
-          <div class="col-xl-10">
-            <div class="text-center text-lg-left">
-              <h1>Trouves les meilleurs professionnels</h1>
-              <h1 class="display-3 font-weight-bold text-danger">autour de toi</h1>
+        <div class="swiper-container hero-slider">
+            <div class="swiper-wrapper dark-overlay">
+                <div class="swiper-slide"
+                     style="background-image:url({% static 'img/photo/iStock-609608134.jpeg' %})"></div>
+                <div class="swiper-slide"
+                     style="background-image:url({% static 'img/photo/iStock-484798890.jpeg' %})"></div>
+                <div class="swiper-slide"
+                     style="background-image:url({% static 'img/photo/iStock-1055936052.jpeg' %})"></div>
+                <div class="swiper-slide"
+                     style="background-image:url({% static 'img/photo/iStock-1194667041.jpeg' %})"></div>
+                <div class="swiper-slide"
+                     style="background-image:url({% static 'img/photo/iStock-929473012.jpeg' %})"></div>
             </div>
-
-            <div class="search-bar mt-5 p-3 p-lg-1 pl-lg-4">
-
-              <form role="gig_search" method="GET" action="/gig_search/">
-                <input class="form-control" type="hidden" name="form_id" id="form_id" value="gsearch">
-                <div class="row">
-                  <div class="col-lg-6 d-flex align-items-center form-group">
-                    <!-- <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?"> -->
-                    {{ gig_filter.form.title }}
-                  </div>
-
-                  <div class="col-lg-4 d-flex align-items-center form-group">
-                    <div class="input-label-absolute input-label-absolute-right w-100">
-                      <label class="label-absolute" for="location"><i class="fa fa-crosshairs"></i><span class="sr-only">City</span></label>
-                      {{ gig_filter.form.city }}
+        </div>
+        <div class="container py-6 py-md-7 text-white z-index-20">
+            <div class="row">
+                <div class="col-xl-10">
+                    <div class="text-center text-lg-left">
+                        <h1>Trouves les meilleurs professionnels</h1>
+                        <h1 class="display-3 font-weight-bold text-danger">autour de toi</h1>
                     </div>
-                  </div>
-                  <div class="col-lg-2">
-                    <button class="btn btn-primary btn-block rounded-xl h-100" type="submit">Go</button> 
-                    <!--<a class="btn btn-primary btn-block rounded-xl h-100" href="{% url 'gig_search' %}">Go</a> -->
-                  </div>
+
+                    <div class="search-bar mt-5 p-3 p-lg-1 pl-lg-4">
+
+                        <form role="gig_search" method="GET" action="/gig_search/">
+                            <input class="form-control" type="hidden" name="form_id" id="form_id" value="gsearch">
+                            <div class="row">
+                                <div class="col-lg-6 d-flex align-items-center form-group">
+                                    <!-- <input class="form-control border-0 shadow-0" type="text" name="title" placeholder="Quel metier recherches tu?"> -->
+                                    {{ gig_filter.form.title }}
+                                </div>
+
+                                <div class="col-lg-4 d-flex align-items-center form-group">
+                                    <div class="input-label-absolute input-label-absolute-right w-100">
+                                        <label class="label-absolute" for="location"><i
+                                                class="fa fa-crosshairs"></i><span class="sr-only">City</span></label>
+                                        {{ gig_filter.form.city }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button class="btn btn-primary btn-block rounded-xl h-100" type="submit">Go</button>
+                                    <!--<a class="btn btn-primary btn-block rounded-xl h-100" href="{% url 'gig_search' %}">Go</a> -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
-              </form>
             </div>
-            
-          </div>
         </div>
-      </div>
     </section>
     <section class="py-6 bg-gray-100">
-      <div class="container">
-        <div class="text-center pb-lg-4">
-          <p class="subtitle text-secondary">Bara-Môgô :</p>
-          <h2 class="mb-5">C'est la création de partenaires de confiance</h2>
+        <div class="container">
+            <div class="text-center pb-lg-4">
+                <p class="subtitle text-secondary">Bara-Môgô :</p>
+                <h2 class="mb-5">C'est la création de partenaires de confiance</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                    <div class="px-0 px-lg-3">
+                        <div class="icon-rounded bg-primary-light mb-3">
+                            <svg class="svg-icon text-primary w-2rem h-2rem">
+                                <use xlink:href="#destination-map-1"></use>
+                            </svg>
+                        </div>
+                        <h3 class="h5">Trouves le meilleur professionnel</h3>
+                        <p class="text-muted">Tu es un particulier ? Trouves les meilleurs professionnels recommandés
+                            par leurs clients. Et recommandes les à ton tour.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                    <div class="px-0 px-lg-3">
+                        <div class="icon-rounded bg-primary-light mb-3">
+                            <svg class="svg-icon text-primary w-2rem h-2rem">
+                                <use xlink:href="#pay-by-card-1"></use>
+                            </svg>
+                        </div>
+                        <h3 class="h5">Fais reconnaitre ton savoir-faire</h3>
+                        <p class="text-muted">Tu es un professionnel ? Fais-toi connaître, trouves de nouveaux clients
+                            et valorises ton savoir-faire en bénéficiant de leurs recommandations. </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                    <div class="px-0 px-lg-3">
+                        <div class="icon-rounded bg-primary-light mb-3">
+                            <svg class="svg-icon text-primary w-2rem h-2rem">
+                                <use xlink:href="#heart-1"></use>
+                            </svg>
+                        </div>
+                        <h3 class="h5">Dans un environnement de confiance</h3>
+                        <p class="text-muted">A travers Bara-Môgô, créons ensemble un environnement de rencontre de
+                            confiance entre clients et professionnels. </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-          <div class="col-lg-4 mb-3 mb-lg-0 text-center">
-            <div class="px-0 px-lg-3">
-              <div class="icon-rounded bg-primary-light mb-3">
-                <svg class="svg-icon text-primary w-2rem h-2rem">
-                  <use xlink:href="#destination-map-1"> </use>
-                </svg>
-              </div>
-              <h3 class="h5">Trouves le meilleur professionnel</h3>
-              <p class="text-muted">Tu es un particulier ? Trouves les meilleurs professionnels recommandés par leurs clients. Et recommandes les à ton tour.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3 mb-lg-0 text-center">
-            <div class="px-0 px-lg-3">
-              <div class="icon-rounded bg-primary-light mb-3">
-                <svg class="svg-icon text-primary w-2rem h-2rem">
-                  <use xlink:href="#pay-by-card-1"> </use>
-                </svg>
-              </div>
-              <h3 class="h5">Fais reconnaitre ton savoir-faire</h3>
-              <p class="text-muted">Tu es un professionnel ? Fais-toi connaître, trouves de nouveaux clients et valorises ton savoir-faire en bénéficiant de leurs recommandations. </p>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3 mb-lg-0 text-center">
-            <div class="px-0 px-lg-3">
-              <div class="icon-rounded bg-primary-light mb-3">
-                <svg class="svg-icon text-primary w-2rem h-2rem">
-                  <use xlink:href="#heart-1"> </use>
-                </svg>
-              </div>
-              <h3 class="h5">Dans un environnement de confiance</h3>
-              <p class="text-muted">A travers Bara-Môgô, créons ensemble un environnement de rencontre de confiance entre clients et professionnels. </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <section class="py-6 bg-gray-100"> 
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-8">
-            <p class="subtitle text-secondary">Professionnels </p>
-            <h2>Dernières annonces</h2>
-          </div>
-        </div>
-        <!-- Slider main container-->
-        <div class="swiper-container swiper-container-mx-negative swiper-init pt-3" data-swiper="{&quot;slidesPerView&quot;:4,&quot;spaceBetween&quot;:20,&quot;loop&quot;:false,&quot;roundLengths&quot;:true,&quot;breakpoints&quot;:{&quot;1200&quot;:{&quot;slidesPerView&quot;:3},&quot;991&quot;:{&quot;slidesPerView&quot;:2},&quot;565&quot;:{&quot;slidesPerView&quot;:1}},&quot;pagination&quot;:{&quot;el&quot;:&quot;.swiper-pagination&quot;,&quot;clickable&quot;:true,&quot;dynamicBullets&quot;:true}}">
-          <!-- Additional required wrapper-->
-          <div class="swiper-wrapper pb-5">
-            <!-- Slides-->
-
-            {% for gig in gigs %}  
-            <div class="swiper-slide h-auto px-2">
-              <!-- place item-->
-              <div class="w-100 h-100 hover-animate" data-marker-id="{{ gig.id }}">
-                <div class="card h-100 border-0 shadow">
-                  <div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">
-                      {% if gig.cover_image %}
-                        <img width="100%" height="100%" src="/media/{{ gig.cover_image }}" alt="{{ gig.title }}"/>
-                      {% else %}
-                          <img width="100%" height="100%" src="{% static 'img/gig-back.jpeg' %}" alt="{{ gig.title }}"/>
-                      {% endif %}
-                    <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
-                    <div class="card-img-overlay-bottom z-index-20">
-                      <div class="media text-white text-sm align-items-center">
-                        <div class="media-body"> {{ gig.user.first_name }}</div>
-                      </div>
-                    </div>
-                    <div class="card-img-overlay-top text-right"><a class="card-fav-icon position-relative z-index-40" href="javascript: void();"> 
-                        <svg class="svg-icon text-white">
-                          <use xlink:href="#heart-1"> </use>
-                        </svg></a></div>
-                  </div>
-                  <div class="card-body d-flex align-items-center">
-                    <div class="w-100">
-                      <h6 class="card-title"><a class="text-decoration-none text-dark" href="{% url 'gig_detail' gig.id %}">{{ gig.title|slice:"0:45" }}</a></h6>
-                      <div class="d-flex card-subtitle mb-3">
-                        <p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:35" }}...</p>
-                        <p class="flex-shrink-1 mb-0 card-stars text-xs text-right">
-                          <i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i><i class="fa fa-star text-warning"></i>
-                        </p>
-                      </div>
-                      <p class="card-text text-muted"><span class="h4 text-primary">cfa {{ gig.price }} </span> /h</p>
-                    </div>
-                  </div>
+    <section class="py-6 bg-gray-100">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8">
+                    <p class="subtitle text-secondary">Professionnels </p>
+                    <h2>Dernières annonces</h2>
                 </div>
-              </div>
             </div>
-            {% endfor %}
+            <!-- Slider main container-->
+            <div class="swiper-container swiper-container-mx-negative swiper-init pt-3"
+                 data-swiper="{&quot;slidesPerView&quot;:4,&quot;spaceBetween&quot;:20,&quot;loop&quot;:false,&quot;roundLengths&quot;:true,&quot;breakpoints&quot;:{&quot;1200&quot;:{&quot;slidesPerView&quot;:3},&quot;991&quot;:{&quot;slidesPerView&quot;:2},&quot;565&quot;:{&quot;slidesPerView&quot;:1}},&quot;pagination&quot;:{&quot;el&quot;:&quot;.swiper-pagination&quot;,&quot;clickable&quot;:true,&quot;dynamicBullets&quot;:true}}">
+                <!-- Additional required wrapper-->
+                <div class="swiper-wrapper pb-5">
+                    <!-- Slides-->
 
-          </div>
-          <!-- If we need pagination-->
-          <div class="swiper-pagination"></div>
+                    {% for gig in gigs %}
+                        <div class="swiper-slide h-auto px-2">
+                            <!-- place item-->
+                            <div class="w-100 h-100 hover-animate" data-marker-id="{{ gig.id }}">
+                                <div class="card h-100 border-0 shadow">
+                                    <div class="card-img-top overflow-hidden gradient-overlay card-gig-image"
+                                         style="height: 17vw; object-fit: cover;">
+                                        {% if gig.cover_image %}
+                                            <img width="100%" height="100%" src="/media/{{ gig.cover_image }}"
+                                                 alt="{{ gig.title }}"/>
+                                        {% else %}
+                                            <img width="100%" height="100%" src="{% static 'img/gig-back.jpeg' %}"
+                                                 alt="{{ gig.title }}"/>
+                                        {% endif %}
+                                        <a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>
+                                        <div class="card-img-overlay-bottom z-index-20">
+                                            <div class="media text-white text-sm align-items-center">
+                                                <div class="media-body"> {{ gig.user.first_name }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-img-overlay-top text-right"><a
+                                                class="card-fav-icon position-relative z-index-40"
+                                                href="javascript: void();">
+                                            <svg class="svg-icon text-white">
+                                                <use xlink:href="#heart-1"></use>
+                                            </svg>
+                                        </a></div>
+                                    </div>
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="w-100">
+                                            <h6 class="card-title"><a class="text-decoration-none text-dark"
+                                                                      href="{% url 'gig_detail' gig.id %}">{{ gig.title|slice:"0:45" }}</a>
+                                            </h6>
+                                            <div class="d-flex card-subtitle mb-3">
+                                                <p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:35" }}...</p>
+                                            </div>
+                                            <div class="star-rating mb-2" id="gig-id-{{ gig.id }}"></div>
+                                            <p class="card-text text-muted"><span
+                                                    class="h4 text-primary">cfa {{ gig.price }} </span> /h</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <!-- If we need pagination-->
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
-      </div>
     </section>
     <!-- Divider Section-->
     {% if user.is_anonymous %}
-    <section class="py-7 position-relative dark-overlay"><img class="bg-image" src="{% static 'img/photo/photo-1497436072909-60f360e1d4b1.jpg' %}" alt="">
-      <div class="container">
-        <div class="overlay-content text-white py-lg-5">
-          <h3 class="display-3 font-weight-bold text-serif text-shadow mb-5">Envie de proposer tes services?</h3><a class="btn btn-light" href="{% url 'signup' %}">Inscris toi</a>
-        </div>
-      </div>
-    </section>
+        <section class="py-7 position-relative dark-overlay"><img class="bg-image"
+                                                                  src="{% static 'img/photo/photo-1497436072909-60f360e1d4b1.jpg' %}"
+                                                                  alt="">
+            <div class="container">
+                <div class="overlay-content text-white py-lg-5">
+                    <h3 class="display-3 font-weight-bold text-serif text-shadow mb-5">Envie de proposer tes
+                        services?</h3><a class="btn btn-light" href="{% url 'signup' %}">Inscris toi</a>
+                </div>
+            </div>
+        </section>
     {% endif %}
 
 
     <!-- Instagram-->
     <section>
-      <div class="container-fluid px-0">
-        <div class="swiper-container instagram-slider">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-929473012-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-484798890-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-609608134-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-929926146-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-1055936052-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-1194667041-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-855535900-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/iStock-1204833795-insta.jpeg' %}" alt=" "></a></div>
+        <div class="container-fluid px-0">
+            <div class="swiper-container instagram-slider">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-929473012-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-484798890-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-609608134-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-929926146-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-1055936052-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-1194667041-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-855535900-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/iStock-1204833795-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
 
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/emmanuel-ik-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/lagos-techie-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/ayoola-sal-insta.jpeg' %}" alt=" "></a></div>
-            <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale" src="{% static 'img/instagram/naidoo-insta.jpeg' %}" alt=" "></a></div>
-          </div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/emmanuel-ik-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/lagos-techie-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/ayoola-sal-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                    <div class="swiper-slide overflow-hidden"><a href="#"><img class="img-fluid hover-scale"
+                                                                               src="{% static 'img/instagram/naidoo-insta.jpeg' %}"
+                                                                               alt=" "></a></div>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
-  <script>
-		//Query All input fields
-		var form_fields = document.getElementsByTagName('input')
-		for (var field in form_fields){	
-			form_fields[field].className += ' form-control border-0 shadow-0'
-		}
+    <script>
+        //Query All input fields
+        var form_fields = document.getElementsByTagName('input')
+        for (var field in form_fields) {
+            form_fields[field].className += ' form-control border-0 shadow-0'
+        }
 
-    var form_select = document.getElementsByTagName('select')
-    for (var sel_field in form_select){	
-			form_select[sel_field].className += ' selectpicker'
-		}
-    // replace default value (------) for select options
-    var e = document.getElementById("id_city");
-    document.getElementById('id_city').options[e.selectedIndex].text='Ville ?';
-    // set placeholder for gig title form input 
-    form_fields[2].placeholder='Quel métier recherches tu ?';
-	</script>
+        var form_select = document.getElementsByTagName('select')
+        for (var sel_field in form_select) {
+            form_select[sel_field].className += ' selectpicker'
+        }
+        // replace default value (------) for select options
+        var e = document.getElementById("id_city");
+        document.getElementById('id_city').options[e.selectedIndex].text = 'Ville ?';
+        // set placeholder for gig title form input
+        form_fields[2].placeholder = 'Quel métier recherches tu ?';
+
+        $(document).ready(function () {
+            let reviews = 0
+            let totalStars = 0
+            {% for gig in gigs %}
+                {% for review in gig.review_set.all %}
+                    reviews++;
+                    totalStars += parseInt('{{ review.rating }}')
+                {% endfor %}
+                console.log("reviews ===", '{{gig.id}}')
+                $('#gig-id-{{ gig.id }}').raty({
+                    score: totalStars / reviews,
+                    size: 16,
+                    path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",
+                    readOnly: true
+                });
+                reviews = 0
+                totalStars = 0
+            {% endfor %}
+        });
+    </script>
 {% endblock %}

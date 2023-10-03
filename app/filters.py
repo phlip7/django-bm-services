@@ -1,6 +1,6 @@
 import django_filters
 from .models import Gig, Address
-
+from django.forms.widgets import TextInput
 
 class GigFilter(django_filters.FilterSet):
 
@@ -18,9 +18,11 @@ class GigFilter(django_filters.FilterSet):
                 cities += (address.city, address.city),
         self.filters['city'].extra['choices'] = cities
         self.filters['country'].extra['choices'] = countries
+        self.filters['title'].extra['widget'] = TextInput(attrs={'placeholder': 'MOTS CLÉS'})
+        self.filters['category'].extra['empty_label'] = 'CATEGORIES'
 
-    country = django_filters.ChoiceFilter(label='Country')
-    city = django_filters.ChoiceFilter(label='City')
+    country = django_filters.ChoiceFilter(label='Country', empty_label='PAYS')
+    city = django_filters.ChoiceFilter(label='City', empty_label='VILLE')
     lat = django_filters.NumberFilter()
     lng = django_filters.NumberFilter()
 
@@ -38,14 +40,19 @@ class GigFilter(django_filters.FilterSet):
             city = self.request.GET.get('city')
             lat = self.request.GET.get('lat')
             lng = self.request.GET.get('lng')
+            print("form_id ==", form_id, "category ==", category, "country ==", country, "city ==", city, "lat ==", lat, "lng ==", lng)
             if form_id == "gfilter":
-                if category != "":
+                if category and category != "":
+                    print("category is not missing", category)
                     parent = parent.filter(category=category)
                 if city and city != "":
+                    print("City is not missing", city)
                     parent = parent.filter(location__city__icontains=city)
-                if country != "":
+                if country and country != "":
+                    print("Country is not missing", country)
                     parent = parent.filter(location__country__icontains=country)
                 if lat != "" and lng != "":
+                    print("Latitude is not missing", lat, lng)
                     lat_val = float(lat)
                     lng_val = float(lng)
                     parent = parent.filter(location__lat__range=(lat_val - 0.2, lat_val + 0.2),

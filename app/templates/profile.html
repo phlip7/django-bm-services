@@ -88,14 +88,8 @@
                                                 </h6>
                                                 <div class="d-flex card-subtitle mb-3">
                                                     <p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:35" }}...</p>
-                                                    <p class="flex-shrink-1 mb-0 card-stars text-xs text-right"><i
-                                                            class="fa fa-star text-warning"></i><i
-                                                            class="fa fa-star text-warning"></i><i
-                                                            class="fa fa-star text-warning"></i><i
-                                                            class="fa fa-star text-warning"></i><i
-                                                            class="fa fa-star text-warning"></i>
-                                                    </p>
                                                 </div>
+                                                <div class="star-rating mb-2" id="gig-id-{{ gig.id }}"></div>
                                                 <p class="card-text text-muted"><span
                                                         class="h4 text-primary">cfa {{ gig.price }}</span> /h</p>
                                             </div>
@@ -111,4 +105,25 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function () {
+            let reviews = 0
+            let totalStars = 0
+            {% for gig in gigs %}
+                {% for review in gig.review_set.all %}
+                    reviews++;
+                    totalStars += parseInt('{{ review.rating }}')
+                {% endfor %}
+                console.log("reviews ===", '{{gig.id}}')
+                $('#gig-id-{{ gig.id }}').raty({
+                    score: totalStars / reviews,
+                    size: 16,
+                    path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",
+                    readOnly: true
+                });
+                reviews = 0
+                totalStars = 0
+            {% endfor %}
+        });
+    </script>
 {% endblock %}
