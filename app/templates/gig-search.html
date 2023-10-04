@@ -249,13 +249,14 @@
                         {#const description = "{{ gig.description|slice:"0:200" }}";#}
                         {#const gigId = "{{ gig.id }}";#}
                         {#const gigPrice = "{{ gig.price }}";#}
-                        {#{% if gig.cover_image %}#}
-                        {#    imageUrl = "/media/{{ gig.cover_image }}"#}
-                        {#{% else %}#}
-                        {#    imageUrl = "{% static 'img/gig-back.jpeg' %}"#}
-                        {#{% endif %}#}
+                        {% if gig.cover_image %}
+                            imageUrl = "/media/{{ gig.cover_image }}"
+                        {% else %}
+                            imageUrl = "{% static 'img/gig-back.jpeg' %}"
+                        {% endif %}
                         {#const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);#}
-                        const  content = gigTitle;
+                        {#const  content = gigTitle;#}
+                        const content = getContent(imageUrl, "url", "firstName", gigTitle, "description", "gigId", "gigPrice");
                         infoWindow.close();
                         let allReviews = 0;
                         let mapTotalStars = 0;
