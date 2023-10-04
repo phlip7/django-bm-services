@@ -218,7 +218,7 @@
                 {% endfor %}
             {% endif %}
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 10,
+                zoom: 13,
                 center: myLatlng,
                 mapId: google.maps.MapTypeId.ROADMAP
             });
@@ -239,7 +239,6 @@
                     )
                 });
                 markers.push(marker);
-                console.log("Init map === {{ gig.title }}");
                 google.maps.event.addListener(marker, 'mouseover', (function (marker) {
                     return function () {
                         let imageUrl = "";
