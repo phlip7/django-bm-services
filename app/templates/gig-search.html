@@ -287,14 +287,14 @@
                             allReviews++;
                             mapTotalStars += parseInt('{{ review.rating }}')
                         {% endfor %}
-                        $(document).ready(function () {
-                            $('#map-gig-id-{{ gig.id }}').raty({
-                                score: mapTotalStars / allReviews,
-                                size: 16,
-                                path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",
-                                readOnly: true
-                            });
-                        });
+                        {#$(document).ready(function () {#}
+                        {#    $('#map-gig-id-{{ gig.id }}').raty({#}
+                        {#        score: mapTotalStars / allReviews,#}
+                        {#        size: 16,#}
+                        {#        path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",#}
+                        {#        readOnly: true#}
+                        {#    });#}
+                        {#});#}
                         infoWindow.setContent(content);
                         infoWindow.open(marker.get("map"), marker);
                     }
