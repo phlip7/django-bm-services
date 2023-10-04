@@ -254,7 +254,8 @@
                         {% else %}
                             imageUrl = "{% static 'img/gig-back.jpeg' %}"
                         {% endif %}
-                        const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);
+                        {#const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);#}
+                        const  content = gigTitle;
                         infoWindow.close();
                         let allReviews = 0;
                         let mapTotalStars = 0;
