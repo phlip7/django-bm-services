@@ -178,7 +178,7 @@
             document.querySelector("#id_address").value = address;
         }
 
-        async function initMap() {
+        function initMap() {
             const input = document.getElementById("id_address");
             const options = {
                 types: ['neighborhood', 'locality', 'sublocality', 'postal_code'],
@@ -239,6 +239,7 @@
                     )
                 });
                 markers.push(marker);
+                console.log("Init map === {{ gig.title }}")
                 google.maps.event.addListener(marker, 'mouseover', (function (marker) {
                     return function () {
                         const content = '<div class="card h-100 border-0 shadow">' +
