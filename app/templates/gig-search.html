@@ -246,7 +246,7 @@
                         const url = "{% url 'gig_detail' gig.id %}";
                         const firstName = "{{ gig.user.first_name }}";
                         const gigTitle = "{{ gig.title|slice:"0:45" }}";
-                        let desc = "";
+                        {#let desc = "{{ gig.description|slice:"0:200" }}";#}
                         const gigId = "{{ gig.id }}";
                         const gigPrice = "{{ gig.price }}";
                         {% if gig.cover_image %}
@@ -254,10 +254,6 @@
                         {% else %}
                             imageUrl = "{% static 'img/gig-back.jpeg' %}"
                         {% endif %}
-                        {% if gig.description %}
-                            desc = "{{ gig.description|slice:"0:200" }}";
-                        {% endif %}
-                        console.log(desc);
                         const content = getContent(imageUrl, url, firstName, gigTitle, "desc", gigId, gigPrice);
                         infoWindow.close();
                         let allReviews = 0;
