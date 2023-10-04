@@ -228,6 +228,7 @@
             let infoWindow = new google.maps.InfoWindow({
                 content: "Starting",
                 ariaLabel: "Uluru",
+                maxWidth: 400
             });
             {% for gig in gigs %}
                 marker = new google.maps.Marker({
@@ -287,15 +288,8 @@
                                 readOnly: true
                             });
                         });
-                        infoWindow = new google.maps.InfoWindow({
-                            content: content,
-                            ariaLabel: "Uluru",
-                            maxWidth: 400
-                        });
-                        infoWindow.open({
-                            anchor: marker,
-                            map,
-                        });
+                        infoWindow.setContent(content);
+                        infoWindow.open(marker.get("map"), marker);
                     }
                 })(marker));
             {% endfor %}
