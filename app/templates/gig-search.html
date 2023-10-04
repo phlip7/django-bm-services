@@ -245,7 +245,7 @@
                         let imageUrl = "";
                         const url = "{% url 'gig_detail' gig.id %}";
                         const firstName = "{{ gig.user.first_name }}";
-                        {#const gigTitle = "{{ gig.title|slice:"0:45" }}";#}
+                        const gigTitle = "{{ gig.title|slice:"0:45" }}";
                         {#const description = "{{ gig.description|slice:"0:200" }}";#}
                         const gigId = "{{ gig.id }}";
                         const gigPrice = "{{ gig.price }}";
@@ -256,7 +256,7 @@
                         {% endif %}
                         {#const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);#}
                         {#const  content = gigTitle;#}
-                        const content = getContent(imageUrl, "url", firstName, "gigTitle", "description", gigId, gigPrice);
+                        const content = getContent(imageUrl, url, firstName, gigTitle, "description", gigId, gigPrice);
                         infoWindow.close();
                         let allReviews = 0;
                         let mapTotalStars = 0;
