@@ -242,26 +242,18 @@
                 console.log("Init map === {{ gig.title }}");
                 google.maps.event.addListener(marker, 'mouseover', (function (marker) {
                     return function () {
-                        {#let imageUrl = "";#}
-                        {#let url = "{% url 'gig_detail' gig.id %}";#}
-                        {#let firstName = "{{ gig.user.first_name }}";#}
-                        {#let gigTitle = "{{ gig.title|slice:"0:45" }}";#}
-                        {#let description = "{{ gig.description|slice:"0:200" }}";#}
-                        {#let gigId = "{{ gig.id }}";#}
-                        {#let gigPrice = "{{ gig.price }}";#}
-                        {#{% if gig.cover_image %}#}
-                        {#    imageUrl = "/media/{{ gig.cover_image }}"#}
-                        {#{% else %}#}
-                        {#    imageUrl = "{% static 'img/gig-back.jpeg' %}"#}
-                        {#{% endif %}#}
-                        let imageUrl = "#";
-                        let url = "#";
-                        let firstName = "User Name";
-                        let gigTitle = "Testing Data";
-                        let description = "This is the testing description";
-                        let gigId = "5";
-                        let gigPrice = "50";
-                        
+                        let imageUrl = "";
+                        let url = "{% url 'gig_detail' gig.id %}";
+                        let firstName = "{{ gig.user.first_name }}";
+                        let gigTitle = "{{ gig.title|slice:"0:45" }}";
+                        let description = "{{ gig.description|slice:"0:200" }}";
+                        let gigId = "{{ gig.id }}";
+                        let gigPrice = "{{ gig.price }}";
+{#                        {% if gig.cover_image %}#}
+{#                            imageUrl = "/media/{{ gig.cover_image }}"#}
+{#                        {% else %}#}
+{#                            imageUrl = "{% static 'img/gig-back.jpeg' %}"#}
+{#                        {% endif %}#}
                         const content = '<div class="card h-100 border-0 shadow">' +
                             '<div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">' +
                             '<img width="100%" height="100%" src="' + imageUrl + '" alt="img"/>' +
@@ -295,14 +287,14 @@
                             allReviews++;
                             mapTotalStars += parseInt('{{ review.rating }}')
                         {% endfor %}
-                        {#$(document).ready(function () {#}
-                        {#    $('#map-gig-id-{{ gig.id }}').raty({#}
-                        {#        score: mapTotalStars / allReviews,#}
-                        {#        size: 16,#}
-                        {#        path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",#}
-                        {#        readOnly: true#}
-                        {#    });#}
-                        {#});#}
+                        $(document).ready(function () {
+                            $('#map-gig-id-{{ gig.id }}').raty({
+                                score: mapTotalStars / allReviews,
+                                size: 16,
+                                path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",
+                                readOnly: true
+                            });
+                        });
                         infoWindow.setContent(content);
                         infoWindow.open(marker.get("map"), marker);
                     }
