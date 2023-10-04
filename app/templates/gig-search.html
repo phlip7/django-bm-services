@@ -243,43 +243,18 @@
                 google.maps.event.addListener(marker, 'mouseover', (function (marker) {
                     return function () {
                         let imageUrl = "";
-                        let url = "{% url 'gig_detail' gig.id %}";
-                        let firstName = "{{ gig.user.first_name }}";
-                        let gigTitle = "{{ gig.title|slice:"0:45" }}";
-                        let description = "{{ gig.description|slice:"0:200" }}";
-                        let gigId = "{{ gig.id }}";
-                        let gigPrice = "{{ gig.price }}";
-{#                        {% if gig.cover_image %}#}
-{#                            imageUrl = "/media/{{ gig.cover_image }}"#}
-{#                        {% else %}#}
-{#                            imageUrl = "{% static 'img/gig-back.jpeg' %}"#}
-{#                        {% endif %}#}
-                        const content = '<div class="card h-100 border-0 shadow">' +
-                            '<div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">' +
-                            '<img width="100%" height="100%" src="' + imageUrl + '" alt="img"/>' +
-                            '<a class="tile-link" href="' + url + '"></a>' +
-                            '<div class="card-img-overlay-bottom z-index-20">' +
-                            '<div class="media text-white text-sm align-items-center">' +
-                            '<div class="media-body">' + firstName + '</div>' +
-                            '</div>' +
-                            '</div>' +
-                            '<div class="card-img-overlay-top text-right"> <a class="card-fav-icon position-relative z-index-40"href="javascript: void();">' +
-                            '<svg class="svg-icon text-white">' +
-                            '<use xlink:href="#heart-1"></use>' +
-                            '</svg>' +
-                            '</a></div>' +
-                            '</div>' +
-                            '<div class="card-body d-flex align-items-center">' +
-                            '<div class="w-100">' +
-                            '<h6 class="card-title"><a class="text-decoration-none text-dark" href="' + url + '">' + gigTitle + '</a> </h6>' +
-                            '<div class="d-flex card-subtitle mb-3">' +
-                            '<p class="flex-grow-1 mb-0 text-muted text-sm">' + description + '...</p>' +
-                            '</div>' +
-                            '<div class="mb-2" id="map-gig-id-' + gigId + '"></div>' +
-                            '<p class="card-text text-muted"><span class="h4 text-primary">cfa ' + gigPrice + ' </span> /h</p>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
+                        const url = "{% url 'gig_detail' gig.id %}";
+                        const firstName = "{{ gig.user.first_name }}";
+                        const gigTitle = "{{ gig.title|slice:"0:45" }}";
+                        const description = "{{ gig.description|slice:"0:200" }}";
+                        const gigId = "{{ gig.id }}";
+                        const gigPrice = "{{ gig.price }}";
+                        {% if gig.cover_image %}
+                            imageUrl = "/media/{{ gig.cover_image }}"
+                        {% else %}
+                            imageUrl = "{% static 'img/gig-back.jpeg' %}"
+                        {% endif %}
+                        const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);
                         infoWindow.close();
                         let allReviews = 0;
                         let mapTotalStars = 0;
@@ -300,22 +275,52 @@
                     }
                 })(marker));
             {% endfor %}
-        // Configure the click listener.
-        map.addListener("click", (mapsMouseEvent) => {
-            const latLng = mapsMouseEvent.latLng.toJSON()
-            document.querySelector("#id_lat").value = latLng.lat;
-            document.querySelector("#id_lng").value = latLng.lng;
-            const newMarker = new google.maps.Marker({
-                map,
-                position: latLng
+            // Configure the click listener.
+            map.addListener("click", (mapsMouseEvent) => {
+                const latLng = mapsMouseEvent.latLng.toJSON()
+                document.querySelector("#id_lat").value = latLng.lat;
+                document.querySelector("#id_lng").value = latLng.lng;
+                const newMarker = new google.maps.Marker({
+                    map,
+                    position: latLng
+                });
+                if (markers.length > 1 && !isFirstMarker) {
+                    const lastMarker = markers.pop()
+                    lastMarker.setMap(null)
+                }
+                markers.push(newMarker)
+                isFirstMarker = false
             });
-            if (markers.length > 1 && !isFirstMarker) {
-                const lastMarker = markers.pop()
-                lastMarker.setMap(null)
-            }
-            markers.push(newMarker)
-            isFirstMarker = false
-        });
+        }
+
+        function getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice) {
+            const content = '<div class="card h-100 border-0 shadow">' +
+                '<div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">' +
+                '<img width="100%" height="100%" src="' + imageUrl + '" alt="img"/>' +
+                '<a class="tile-link" href="' + url + '"></a>' +
+                '<div class="card-img-overlay-bottom z-index-20">' +
+                '<div class="media text-white text-sm align-items-center">' +
+                '<div class="media-body">' + firstName + '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-img-overlay-top text-right"> <a class="card-fav-icon position-relative z-index-40"href="javascript: void();">' +
+                '<svg class="svg-icon text-white">' +
+                '<use xlink:href="#heart-1"></use>' +
+                '</svg>' +
+                '</a></div>' +
+                '</div>' +
+                '<div class="card-body d-flex align-items-center">' +
+                '<div class="w-100">' +
+                '<h6 class="card-title"><a class="text-decoration-none text-dark" href="' + url + '">' + gigTitle + '</a> </h6>' +
+                '<div class="d-flex card-subtitle mb-3">' +
+                '<p class="flex-grow-1 mb-0 text-muted text-sm">' + description + '...</p>' +
+                '</div>' +
+                '<div class="mb-2" id="map-gig-id-' + gigId + '"></div>' +
+                '<p class="card-text text-muted"><span class="h4 text-primary">cfa ' + gigPrice + ' </span> /h</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            return content;
         }
     </script>
 
