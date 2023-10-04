@@ -275,21 +275,21 @@
                 })(marker));
             {% endfor %}
             // Configure the click listener.
-            map.addListener("click", (mapsMouseEvent) => {
-                const latLng = mapsMouseEvent.latLng.toJSON()
-                document.querySelector("#id_lat").value = latLng.lat;
-                document.querySelector("#id_lng").value = latLng.lng;
-                const newMarker = new google.maps.Marker({
-                    map,
-                    position: latLng
-                });
-                if (markers.length > 1 && !isFirstMarker) {
-                    const lastMarker = markers.pop()
-                    lastMarker.setMap(null)
-                }
-                markers.push(newMarker)
-                isFirstMarker = false
-            });
+            {#map.addListener("click", (mapsMouseEvent) => {#}
+            {#    const latLng = mapsMouseEvent.latLng.toJSON()#}
+            {#    document.querySelector("#id_lat").value = latLng.lat;#}
+            {#    document.querySelector("#id_lng").value = latLng.lng;#}
+            {#    const newMarker = new google.maps.Marker({#}
+            {#        map,#}
+            {#        position: latLng#}
+            {#    });#}
+            {#    if (markers.length > 1 && !isFirstMarker) {#}
+            {#        const lastMarker = markers.pop()#}
+            {#        lastMarker.setMap(null)#}
+            {#    }#}
+            {#    markers.push(newMarker)#}
+            {#    isFirstMarker = false#}
+            {#});#}
         }
 
         function getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice) {
