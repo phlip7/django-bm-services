@@ -33,7 +33,7 @@
                         </div>
 
                         <input type="hidden" name="address" placeholder="Entrez l'emplacement" id="id_address"
-                                   class="form-control pac-target-input" autocomplete="off">
+                               class="form-control pac-target-input" autocomplete="off">
                         <input type="hidden" name="lat" step="any" id="id_lat" class=" form-control pr-4">
                         <input type="hidden" name="lng" step="any" id="id_lng" class=" form-control pr-4">
                         <div class="col-12 col-lg-2 mb-3">
@@ -138,7 +138,6 @@
                     reviews++;
                     totalStars += parseInt('{{ review.rating }}')
                 {% endfor %}
-                console.log("reviews ===", '{{gig.id}}')
                 $('#gig-id-{{ gig.id }}').raty({
                     score: totalStars / reviews,
                     size: 16,
@@ -167,7 +166,7 @@
             document.querySelector("#id_title").value = title;
         }
         if (category) {
-             document.querySelector("#id_category").value = category;
+            document.querySelector("#id_category").value = category;
         }
         if (country) {
             document.querySelector("#id_country").value = country;
@@ -219,13 +218,17 @@
                 {% endfor %}
             {% endif %}
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 8,
+                zoom: 10,
                 center: myLatlng,
                 mapId: google.maps.MapTypeId.ROADMAP
             });
             let markers = []
             let marker
             let isFirstMarker = true
+            let infoWindow = new google.maps.InfoWindow({
+                content: "Starting",
+                ariaLabel: "Uluru",
+            });
             {% for gig in gigs %}
                 marker = new google.maps.Marker({
                     map,
@@ -234,11 +237,70 @@
                         '{{ gig.location.lng }}'
                     )
                 });
-                markers.push(marker)
+                markers.push(marker);
+                google.maps.event.addListener(marker, 'mouseover', (function (marker) {
+                    return function () {
+                        const content = '<div class="card h-100 border-0 shadow">' +
+                            '<div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">' +
+                            '{% if gig.cover_image %}' +
+                                '<img width="100%" height="100%" src="/media/{{ gig.cover_image }}"' +
+                                'alt="{{ gig.title }}"/>' +
+                                '{% else %}' +
+                                '<img width="100%" height="100%" src="{% static 'img/gig-back.jpeg' %}" alt="{{ gig.title }}"/>'
+                                +
+                                '{% endif %}' +
+                            '<a class="tile-link" href="{% url 'gig_detail' gig.id %}"></a>' +
+                            '<div class="card-img-overlay-bottom z-index-20">' +
+                            '<div class="media text-white text-sm align-items-center">' +
+                            '<div class="media-body"> {{ gig.user.first_name }}</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="card-img-overlay-top text-right"> <a class="card-fav-icon position-relative z-index-40"href="javascript: void();">' +
+                            '<svg class="svg-icon text-white">' +
+                            '<use xlink:href="#heart-1"></use>' +
+                            '</svg>' +
+                            '</a></div>' +
+                            '</div>' +
+                            '<div class="card-body d-flex align-items-center">' +
+                            '<div class="w-100">' +
+                            '<h6 class="card-title"><a class="text-decoration-none text-dark" href="{% url 'gig_detail' gig.id %}">{{ gig.title|slice:"0:45" }}</a> </h6>' +
+                            '<div class="d-flex card-subtitle mb-3">' +
+                            '<p class="flex-grow-1 mb-0 text-muted text-sm">{{ gig.description|slice:"0:200" }}...</p>' +
+                            '</div>' +
+                            '<div class="mb-2" id="map-gig-id-{{ gig.id }}"></div>' +
+                            '<p class="card-text text-muted"><span class="h4 text-primary">cfa {{ gig.price }} </span> /h</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        infoWindow.close();
+                        let allReviews = 0;
+                        let mapTotalStars = 0;
+                        {% for review in gig.review_set.all %}
+                            allReviews++;
+                            mapTotalStars += parseInt('{{ review.rating }}')
+                        {% endfor %}
+                        $(document).ready(function () {
+                            $('#map-gig-id-{{ gig.id }}').raty({
+                                score: mapTotalStars / allReviews,
+                                size: 16,
+                                path: "{% static 'vendor/Raty/raty-jquery/lib/images' %}",
+                                readOnly: true
+                            });
+                        });
+                        infoWindow = new google.maps.InfoWindow({
+                            content: content,
+                            ariaLabel: "Uluru",
+                            maxWidth: 400
+                        });
+                        infoWindow.open({
+                            anchor: marker,
+                            map,
+                        });
+                    }
+                })(marker));
             {% endfor %}
             // Configure the click listener.
             map.addListener("click", (mapsMouseEvent) => {
-                console.log("Debug:", mapsMouseEvent.latLng.toJSON());
                 const latLng = mapsMouseEvent.latLng.toJSON()
                 document.querySelector("#id_lat").value = latLng.lat;
                 document.querySelector("#id_lng").value = latLng.lng;
@@ -250,7 +312,6 @@
                     const lastMarker = markers.pop()
                     lastMarker.setMap(null)
                 }
-                console.log(markers)
                 markers.push(newMarker)
                 isFirstMarker = false
             });
