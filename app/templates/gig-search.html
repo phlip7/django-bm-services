@@ -255,7 +255,7 @@
                             imageUrl = "{% static 'img/gig-back.jpeg' %}"
                         {% endif %}
                         {% if gig.description %}
-                            desc = "{{ gig.description|slice:"0:200" }}"
+                            desc = "{{ gig.description }}";
                         {% endif %}
                         const content = getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice);
                         infoWindow.close();
