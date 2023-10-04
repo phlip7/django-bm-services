@@ -246,7 +246,7 @@
                         const url = "{% url 'gig_detail' gig.id %}";
                         const firstName = "{{ gig.user.first_name }}";
                         const gigTitle = "{{ gig.title|slice:"0:45" }}";
-                        let description = "";
+                        let desc = "";
                         const gigId = "{{ gig.id }}";
                         const gigPrice = "{{ gig.price }}";
                         {% if gig.cover_image %}
@@ -255,9 +255,9 @@
                             imageUrl = "{% static 'img/gig-back.jpeg' %}"
                         {% endif %}
                         {% if gig.description %}
-                            description = "{{ gig.description|slice:"0:200" }}"
+                            desc = "{{ gig.description|slice:"0:200" }}"
                         {% endif %}
-                        const content = getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice);
+                        const content = getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice);
                         infoWindow.close();
                         let allReviews = 0;
                         let mapTotalStars = 0;
@@ -296,7 +296,7 @@
             });
         }
 
-        function getContent(imageUrl, url, firstName, gigTitle, description, gigId, gigPrice) {
+        function getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice) {
             const content = '<div class="card h-100 border-0 shadow">' +
                 '<div class="card-img-top overflow-hidden gradient-overlay card-gig-image" style="height: 17vw; object-fit: cover;">' +
                 '<img width="100%" height="100%" src="' + imageUrl + '" alt="img"/>' +
@@ -316,7 +316,7 @@
                 '<div class="w-100">' +
                 '<h6 class="card-title"><a class="text-decoration-none text-dark" href="' + url + '">' + gigTitle + '</a> </h6>' +
                 '<div class="d-flex card-subtitle mb-3">' +
-                '<p class="flex-grow-1 mb-0 text-muted text-sm">' + description + '...</p>' +
+                '<p class="flex-grow-1 mb-0 text-muted text-sm">' + desc + '...</p>' +
                 '</div>' +
                 '<div class="mb-2" id="map-gig-id-' + gigId + '"></div>' +
                 '<p class="card-text text-muted"><span class="h4 text-primary">cfa ' + gigPrice + ' </span> /h</p>' +
