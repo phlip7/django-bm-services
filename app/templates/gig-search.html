@@ -222,9 +222,7 @@
                 center: myLatlng,
                 mapId: google.maps.MapTypeId.ROADMAP
             });
-            let markers = []
             let marker
-            let isFirstMarker = true
             let infoWindow = new google.maps.InfoWindow({
                 content: "Starting",
                 ariaLabel: "Uluru",
@@ -238,8 +236,7 @@
                         '{{ gig.location.lng }}'
                     )
                 });
-                markers.push(marker);
-                google.maps.event.addListener(marker, 'mouseover', (function (marker) {
+                google.maps.event.addListener(marker, 'click', (function (marker) {
                     return function () {
                         let imageUrl = "";
                         const url = "{% url 'gig_detail' gig.id %}";
@@ -274,22 +271,6 @@
                     }
                 })(marker));
             {% endfor %}
-            // Configure the click listener.
-            {#map.addListener("click", (mapsMouseEvent) => {#}
-            {#    const latLng = mapsMouseEvent.latLng.toJSON()#}
-            {#    document.querySelector("#id_lat").value = latLng.lat;#}
-            {#    document.querySelector("#id_lng").value = latLng.lng;#}
-            {#    const newMarker = new google.maps.Marker({#}
-            {#        map,#}
-            {#        position: latLng#}
-            {#    });#}
-            {#    if (markers.length > 1 && !isFirstMarker) {#}
-            {#        const lastMarker = markers.pop()#}
-            {#        lastMarker.setMap(null)#}
-            {#    }#}
-            {#    markers.push(newMarker)#}
-            {#    isFirstMarker = false#}
-            {#});#}
         }
 
         function getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice) {
