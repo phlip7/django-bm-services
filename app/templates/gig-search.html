@@ -238,6 +238,7 @@
                 });
                 google.maps.event.addListener(marker, 'click', (function (marker) {
                     return function () {
+                        map.setZoom(16);
                         let imageUrl = "";
                         const url = "{% url 'gig_detail' gig.id %}";
                         const firstName = "{{ gig.user.first_name }}";
@@ -271,6 +272,10 @@
                     }
                 })(marker));
             {% endfor %}
+            map.addListener("click", () => {
+                {#map.setZoom(13);#}
+                infoWindow.close();
+            });
         }
 
         function getContent(imageUrl, url, firstName, gigTitle, desc, gigId, gigPrice) {
